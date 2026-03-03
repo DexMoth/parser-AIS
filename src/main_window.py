@@ -101,6 +101,9 @@ class MainWindow:
         
         # Вкладка 4: Статистика
         self._create_stats_tab()
+        
+        # Вкладка 5: AI
+        self._create_ai_tab()
     
     def _setup_logging(self):
         """настройка логирования"""
@@ -180,8 +183,8 @@ class MainWindow:
         self.pubs_info = ttk.Label(info_frame, text="Публикации не загружены")
         self.pubs_info.pack(side=tk.LEFT)
         
-        ttk.Button(info_frame, text="↕️ Сортировать по цитированиям", 
-            command=self.sort_publications_by_citations).pack(side=tk.RIGHT, padx=5)
+        #ttk.Button(info_frame, text="↕️ Сортировать по цитированиям", 
+        #    command=self.sort_publications_by_citations).pack(side=tk.RIGHT, padx=5)
 
         # Таблица публикаций
         columns = ('#', 'Название', 'Журнал', 'Год', 'Цит.')
@@ -286,6 +289,85 @@ class MainWindow:
         self.years_text.configure(yscrollcommand=scrollbar.set)
         self.years_text.config(state=tk.DISABLED)
     
+    def _create_ai_tab(self):
+        frame = ttk.Frame(self.notebook)
+        self.notebook.add(frame, text="AI Аналитика")
+        
+        # верхняя панель с информацией
+        info_frame = ttk.Frame(frame)
+        info_frame.pack(fill=tk.X, padx=5, pady=5)
+        
+        ttk.Label(info_frame, text="Анализ тематики публикаций автора", 
+                font=('Arial', 10, 'bold')).pack(side=tk.LEFT)
+        
+        self.ai_status = ttk.Label(info_frame, text="")
+        self.ai_status.pack(side=tk.RIGHT)
+        
+        # создаем текстовое поле с прокруткой для вывода результатов
+        text_frame = ttk.Frame(frame)
+        text_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        self.ai_text = tk.Text(text_frame, wrap=tk.WORD, height=20, font=('Courier New', 9))
+        self.ai_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        scrollbar = ttk.Scrollbar(text_frame, orient=tk.VERTICAL, command=self.ai_text.yview)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        self.ai_text.configure(yscrollcommand=scrollbar.set)
+        
+        # делаем текст нередактируемым
+        self.ai_text.config(state=tk.DISABLED)
+
+    def _update_ai_analytics(self):
+        """обновление AI аналитики"""
+        if not self.current_publications:
+            return
+        
+        # импортируем анализатор здесь, чтобы избежать циклических импортов
+        try:
+            from ai_analyzer import AIAnalyzer
+            analyzer = AIAnalyzer()
+        except ImportError:
+            self.ai_text.config(state=tk.NORMAL)
+            self.ai_text.delete(1.0, tk.END)
+            self.ai_text.insert(tk.END, "Ошибка: модуль ai_analyzer не найден\n")
+            self.ai_text.insert(tk.END, "Установите scikit-learn: pip install scikit-learn")
+            self.ai_text.config(state=tk.DISABLED)
+            return
+        
+        self.ai_status.config(text="анализ...")
+        self.ai_text.config(state=tk.NORMAL)
+        self.ai_text.delete(1.0, tk.END)
+        
+        # выполняем анализ
+        result = analyzer.analyze_author_interests(self.current_publications)
+        
+        # выводим результаты
+        self.ai_text.insert(tk.END, "АНАЛИЗ ТЕМАТИКИ ПУБЛИКАЦИЙ\n")
+        self.ai_text.insert(tk.END, "=" * 50 + "\n\n")
+        
+        self.ai_text.insert(tk.END, f"Проанализировано публикаций: {result['total_analyzed']}\n\n")
+        
+        if result['main_topics']:
+            self.ai_text.insert(tk.END, "ОСНОВНЫЕ ТЕМЫ:\n")
+            for i, topic in enumerate(result['main_topics'], 1):
+                self.ai_text.insert(tk.END, f"  {i}. {topic}\n")
+            self.ai_text.insert(tk.END, "\n")
+        
+        if result['keywords_tfidf']:
+            self.ai_text.insert(tk.END, "КЛЮЧЕВЫЕ СЛОВА (TF-IDF):\n")
+            for kw in result['keywords_tfidf']:
+                self.ai_text.insert(tk.END, f"  • {kw['word']:20} (вес: {kw['weight']})\n")
+            self.ai_text.insert(tk.END, "\n")
+        
+        if result['frequent_words']:
+            self.ai_text.insert(tk.END, "ЧАСТОТНЫЙ АНАЛИЗ:\n")
+            for word, count in result['frequent_words'][:10]:
+                bar = '█' * min(count, 30)
+                self.ai_text.insert(tk.END, f"  {word:15} {bar} {count}\n")
+        
+        self.ai_text.config(state=tk.DISABLED)
+        self.ai_status.config(text="готово")
+
     def search_author(self):
         """Поиск автора по ID"""
         author_id = self.id_entry.get().strip()
@@ -341,6 +423,9 @@ class MainWindow:
                 # обновляем статистику
                 self.logger.info("обновление статистики...")
                 self.root.after(0, self._update_stats)
+
+                self.logger.info("обновление AI аналитики...")
+                self.root.after(0, self._update_ai_analytics)
 
             else:
                 self.root.after(0, messagebox.showerror, "Ошибка", f"Автор с ID {author_id} не найден")
