@@ -1,0 +1,11 @@
+{
+    "USE_LOGIN_FROM_CONFIG": true,
+    "LOGIN_DATA": {
+        "login": "Исаева Александра",
+        "password": "9/4209/3"
+    },
+    "DELAY_MIN": 40,
+    "DELAY_MAX": 60,
+    "TIMEOUT": 30,
+    "BASE_URL": "https://www.elibrary.ru"
+}

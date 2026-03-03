@@ -1,0 +1,3356 @@
+<html><head>
+<meta name="robots" content="noindex,nofollow">
+<title>Тронин Вадим Георгиевич - Список публикаций</title>
+
+<script type="text/javascript" src="/jquery.min.js"></script>
+<script type="text/javascript" src="/jquery.tools.min.js"></script>
+<script type="text/javascript" src="/fancybox/jquery.fancybox-1.3.4.pack.js"></script>
+<script type="text/javascript" src="/fancybox/jquery.easydrag.js"></script>
+<script type="text/javascript" src="/elibrary1.js"></script>
+<script type="text/javascript" src="/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<link rel="stylesheet" href="/fancybox/jquery.fancybox-1.3.4.css" type="text/css" media="screen">
+<link rel="stylesheet" href="/style_sm.css" type="text/css" media="screen">
+
+<script language="JavaScript">
+
+but_blue_hover=new Image();
+but_blue_hover.src="/images/but_blue_hover.png";
+but_red_hover=new Image();
+but_red_hover.src="/images/but_red_hover.png";
+but_gray_hover=new Image();
+but_gray_hover.src="/images/but_gray_hover.png";
+
+w_down=new Image();
+w_down.src="/pic/w_show.gif";
+w_up=new Image();
+w_up.src="/pic/w_hide.gif";
+ws_down=new Image();
+ws_down.src="/images/or_er2_down.gif";
+ws_up=new Image();
+ws_up.src="/images/or_close2.gif";
+
+var selRow;
+var row_color;
+function onRowClick(row){
+  if(row != selRow){
+     if (selRow != null){
+        selRow.bgColor = row_color;
+     }
+  selRow = row;
+  row_color = row.bgColor;
+  selRow.bgColor="#e8e8e8";
+  }
+}
+function hideShow(elem,parent) {
+  var child =  document.getElementById(elem);
+  child.className = child.className == "collapsed" ? "expanded" : "collapsed";
+  if (parent.className == "win_expandable") parent.src = child.className == "collapsed" ? w_down.src : w_up.src;
+}
+function hideShowSel(elem) {
+  var child =  document.getElementById(elem);
+  child.className = child.className == "collapsed" ? "expanded" : "collapsed";
+  var imgparent =  document.getElementById('img_'+elem);
+  if (imgparent.className == "win_expandable") imgparent.src = child.className == "collapsed" ? ws_down.src : ws_up.src;
+  var txtparent =  document.getElementById('txt_'+elem);
+  if (txtparent.className == "win_expandable") txtparent.innerHTML = child.className == "collapsed" ? "Раскрыть" : "Скрыть";
+}
+function hideShowSel1(elem) {
+  var child =  document.getElementById(elem);
+  $('#'+elem).slideToggle(500, function(){didScroll = true;})
+  child.className = child.className == "collapsed1" ? "expanded1" : "collapsed1";
+  if (child.className == "collapsed1") {
+    $('#'+elem).slideUp(500, function(){didScroll = true;})}
+  else {
+    $('#'+elem).slideDown(500, function(){didScroll = true;})}
+  var txtparent =  document.getElementById('txt_'+elem);
+  if (txtparent.className == "win_expandable") txtparent.innerHTML = child.className == "collapsed1" ? "▼" : "▲";
+}
+function RowSelect(row,sel){
+  var rbgc = sel==1 ? "#e8e8e8" : "#f5f5f5";
+  $('#'+row+' td').attr('bgColor', rbgc);
+}
+function select_all(){
+  $('input:checkbox[name^="tid"]').attr('checked', true);
+  $('input:checkbox[name^="pid"]').attr('checked', true);
+  $('tr[id^="arw"] td').attr('bgColor', "#e8e8e8");
+  $('tr[id^="brw"] td').attr('bgColor', "#e8e8e8");
+}
+function deselect_all(){
+  $('input:checkbox[name^="tid"]').attr('checked', false);
+  $('input:checkbox[name^="pid"]').attr('checked', false);
+  $('tr[id^="arw"] td').attr('bgColor', "#f5f5f5");
+  $('tr[id^="brw"] td').attr('bgColor', "#f5f5f5");
+}
+function select_options(sname){
+  $('input:checkbox[name^="'+sname+'s_"]').attr('checked', true);
+  $('tr[name^="'+sname+'_"]').attr('bgColor', "#dddddd");
+  checked_count(sname);
+  isnew=1;
+  }
+function deselect_options(sname){
+  $('input:checkbox[name^="'+sname+'s_"]').attr('checked', false);
+  $('tr[name^="'+sname+'_"]').attr('bgColor', "#f5f5f5");
+  checked_count(sname);
+  isnew=1;
+}
+function wait_load_options(sname){
+  $('span[name="'+sname+'sheader"]').text('загружается...');
+}
+function checked_count(sname){
+  var nb=$('input:checkbox[name^="'+sname+'s_"]:checked').length;
+  if (nb>0){$('span[name="'+sname+'sheader"]').html('(выделено: ' + nb + ')')}
+  else{$('span[name="'+sname+'sheader"]').text('')}
+}
+var ir=0;
+function resizelist(sname, offset) {
+ if (ir <= offset+10) {
+  ir=ir+1;
+  $('div[id="'+sname+'_options"]').height(ir+50);
+  window.setTimeout('resizelist("'+sname+'", '+offset+')', 1);
+ }
+}
+var rubricloaded=0;
+var titleloaded=0;
+var orgloaded=0;
+var authorloaded=0;
+var yearloaded=0;
+var typeloaded=0;
+var catloaded=0;
+var roleloaded=0;
+var keywordloaded=0;
+var isnew=0;
+
+$(document).ready(function() { 
+	didScroll=true;
+
+
+
+$('#rubric_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="rubrics_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(8) + "|"});
+$('#rubrics_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#rubrics_options').load("author_items_rubrics.asp?id=524702&order=" + $('#rubric_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+rubricloaded=1;
+})
+$('*[id$="_rubrics"]').click(function() { 
+hideShowSel1('rubrics');
+if (rubricloaded==0){
+$('#rubrics_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_rubrics.asp?id=524702&order=" + $('#rubric_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#rubrics_options').html(data);
+  if ($('#rubrics_table').height()<=200){$('#rubrics_options').height($('#rubrics_table').height()+10)}
+  else {$('#rubrics_options').height(200)};
+  rubricloaded=1;
+  })
+}
+else {
+  if ($('#rubrics_table').height()<=200){$('#rubrics_options').height($('#rubrics_table').height()+10)}
+  else {$('#rubrics_options').height(200)};
+}
+})
+
+
+$('#title_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="titles_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(7) + "|"});
+$('#titles_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#titles_options').load("author_items_titles.asp?id=524702&order=" + $('#title_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+titleloaded=1;
+})
+$('*[id$="_titles"]').click(function() { 
+hideShowSel1('titles');
+if (titleloaded==0){
+$('#titles_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_titles.asp?id=524702&order=" + $('#title_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#titles_options').html(data);
+  if ($('#titles_table').height()<=200){$('#titles_options').height($('#titles_table').height()+10)}
+  else {$('#titles_options').height(200)};
+  titleloaded=1;
+  })
+}
+else {
+  if ($('#titles_table').height()<=200){$('#titles_options').height($('#titles_table').height()+10)}
+  else {$('#titles_options').height(200)};
+}
+})
+
+
+$('#org_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="orgs_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(5) + "|"});
+$('#orgs_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#orgs_options').load("author_items_orgs.asp?id=524702&order=" + $('#org_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+orgloaded=1;
+})
+$('*[id$="_orgs"]').click(function() { 
+hideShowSel1('orgs');
+if (orgloaded==0){
+$('#orgs_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_orgs.asp?id=524702&order=" + $('#org_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#orgs_options').html(data);
+  if ($('#orgs_table').height()<=200){$('#orgs_options').height($('#orgs_table').height()+10)}
+  else {$('#orgs_options').height(200)};
+  orgloaded=1;
+  })
+}
+else {
+  if ($('#orgs_table').height()<=200){$('#orgs_options').height($('#orgs_table').height()+10)}
+  else {$('#orgs_options').height(200)};
+}
+})
+
+
+$('#author_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="authors_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(8) + "|"});
+selids = encodeURIComponent(selids);
+$('#authors_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#authors_options').load("author_items_authors.asp?id=524702&order=" + $('#author_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+authorloaded=1;
+})
+$('*[id$="_authors"]').click(function() { 
+hideShowSel1('authors');
+if (authorloaded==0){
+$('#authors_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_authors.asp?id=524702&order=" + $('#author_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#authors_options').html(data);
+  if ($('#authors_table').height()<=200){$('#authors_options').height($('#authors_table').height()+10)}
+  else {$('#authors_options').height(200)};
+  authorloaded=1;
+  })
+}
+else {
+  if ($('#authors_table').height()<=200){$('#authors_options').height($('#authors_table').height()+10)}
+  else {$('#authors_options').height(200)};
+}
+})
+
+
+$('#year_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="years_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(6) + "|"});
+$('#years_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#years_options').load("author_items_years.asp?id=524702&order=" + $('#year_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+yearloaded=1;
+})
+$('*[id$="_years"]').click(function() { 
+hideShowSel1('years');
+if (yearloaded==0){
+$('#years_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_years.asp?id=524702&order=" + $('#year_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#years_options').html(data);
+  if ($('#years_table').height()<=200){$('#years_options').height($('#years_table').height()+10)}
+  else {$('#years_options').height(200)};
+  yearloaded=1;
+  })
+}
+else {
+  if ($('#years_table').height()<=200){$('#years_options').height($('#years_table').height()+10)}
+  else {$('#years_options').height(200)};
+}
+})
+
+
+$('#type_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="types_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(6) + "|"});
+$('#types_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#types_options').load("author_items_types.asp?id=524702&order=" + $('#type_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+typeloaded=1;
+})
+$('*[id$="_types"]').click(function() { 
+hideShowSel1('types');
+if (typeloaded==0){
+$('#types_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_types.asp?id=524702&order=" + $('#type_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#types_options').html(data);
+  if ($('#types_table').height()<=200){$('#types_options').height($('#types_table').height()+10)}
+  else {$('#types_options').height(200)};
+  typeloaded=1;
+  })
+}
+else {
+  if ($('#types_table').height()<=200){$('#types_options').height($('#types_table').height()+10)}
+  else {$('#types_options').height(200)};
+}
+})
+
+
+$('#cat_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="cats_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(6) + "|"});
+$('#cats_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#cats_options').load("author_items_cats.asp?id=524702&order=" + $('#cat_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+catloaded=1;
+})
+$('*[id$="_cats"]').click(function() { 
+hideShowSel1('cats');
+if (catloaded==0){
+$('#cats_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_cats.asp?id=524702&order=" + $('#cat_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#cats_options').html(data);
+  if ($('#cats_table').height()<=200){$('#cats_options').height($('#cats_table').height()+10)}
+  else {$('#cats_options').height(200)};
+  catloaded=1;
+  })
+}
+else {
+  if ($('#cats_table').height()<=200){$('#cats_options').height($('#cats_table').height()+10)}
+  else {$('#cats_options').height(200)};
+}
+})
+
+
+$('#role_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="roles_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(6) + "|"});
+$('#roles_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#roles_options').load("author_items_roles.asp?id=524702&order=" + $('#role_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+roleloaded=1;
+})
+$('*[id$="_roles"]').click(function() { 
+hideShowSel1('roles');
+if (roleloaded==0){
+$('#roles_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_roles.asp?id=524702&order=" + $('#role_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#roles_options').html(data);
+  if ($('#roles_table').height()<=200){$('#roles_options').height($('#roles_table').height()+10)}
+  else {$('#roles_options').height(200)};
+  roleloaded=1;
+  })
+}
+else {
+  if ($('#roles_table').height()<=200){$('#roles_options').height($('#roles_table').height()+10)}
+  else {$('#roles_options').height(200)};
+}
+})
+
+
+$('#keyword_order').change(function() { 
+var selids="";
+$('input:checkbox[id^="keywords_"]:checked').each(function(){
+  selids += $(this).attr('name').substring(9) + "|"});
+$('#keywords_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$('#keywords_options').load("author_items_keywords.asp?id=524702&order=" + $('#keyword_order').val() + "&selids=" + selids + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random());
+keywordloaded=1;
+})
+$('*[id$="_keywords"]').click(function() { 
+hideShowSel1('keywords');
+if (keywordloaded==0){
+$('#keywords_options').html("<br>&nbsp;&nbsp;&nbsp;Загружается...");
+$.get("author_items_keywords.asp?id=524702&order=" + $('#keyword_order').val() + "&selids=" + "&show_hash=0&show_refs=1&hide_doubles=1&rand=" + Math.random(), function(data) {
+  $('#keywords_options').html(data);
+  if ($('#keywords_table').height()<=200){$('#keywords_options').height($('#keywords_table').height()+10)}
+  else {$('#keywords_options').height(200)};
+  keywordloaded=1;
+  })
+}
+else {
+  if ($('#keywords_table').height()<=200){$('#keywords_options').height($('#keywords_table').height()+10)}
+  else {$('#keywords_options').height(200)};
+}
+})
+
+
+})
+
+function reset_form(){
+  var frm = document.forms["results"];
+  deselect_options("rubric"); 
+  deselect_options("title"); 
+  deselect_options("org"); 
+  deselect_options("author"); 
+  deselect_options("year"); 
+  deselect_options("type"); 
+  deselect_options("cat"); 
+  deselect_options("role"); 
+  deselect_options("keyword"); 
+}
+function pub_search(){
+  var frm = document.forms["results"];
+    frm.pagenum.value=1;
+    frm.action="author_items.asp";
+    frm.target="";
+    frm.submit()
+}
+
+
+function itembox_add(){
+  var frm = document.forms["results"];
+  var issel=0;
+  frm.items_all.value="";
+  for (var i = 0; i < frm.elements.length; i++) {
+    if (frm.elements[i].name.substring(0,3)=="tid"){
+       if (frm.elements[i].checked) {
+	     issel=issel+1;
+	     frm.items_all.value = frm.items_all.value + frm.elements[i].name.substring(3, frm.elements[i].name.length) + "|";
+	   }
+    }
+	}
+	if (issel==0) {
+    alerts ("Не выделено ни одной публикации")}
+	else {
+    $.fancybox({
+      href : 'itembox_select.asp?items_all='+frm.items_all.value ,
+      title : '',
+			padding : 20,     
+			width : 480,
+			height : 400,
+			overlayOpacity : 0.3,	
+			overlayColor : '#000',
+			speedIn : 500,
+			hideOnOverlayClick : false,
+			enableEscapeButton : true,
+			type : 'iframe'
+    });
+  }
+}
+
+function itembox_add_all(){
+  var frm = document.forms["results"];
+	$.fancybox({
+		href : 'itembox_select.asp?listid='+frm.listid.value ,
+		title : '',
+		padding : 20,     
+		width : 480,
+		height : 400,
+		overlayOpacity : 0.3,	
+		overlayColor : '#000',
+		speedIn : 500,
+		hideOnOverlayClick : false,
+		enableEscapeButton : true,
+		type : 'iframe'
+	});
+}
+
+function items_rubric_add(){
+  var frm = document.forms["results"];
+  var issel=0;
+  frm.items_all.value="";
+  for (var i = 0; i < frm.elements.length; i++) {
+    if (frm.elements[i].name.substring(0,3)=="tid"){
+       if (frm.elements[i].checked) {
+	     issel=issel+1;
+	     frm.items_all.value = frm.items_all.value + frm.elements[i].name.substring(3, frm.elements[i].name.length) + "|";
+	   }
+    }
+ }
+ if (issel==0) {
+    alerts ("Не выделено ни одной публикации")}
+ else {
+  $.fancybox({
+    href : 'items_rubric_add.asp?items_all='+frm.items_all.value ,
+    title : '',
+	  padding : 20,     
+	  width : 480,
+	  height : 150,
+	  overlayOpacity : 0.3,	
+	  overlayColor : '#000',
+	  speedIn : 500,
+	  hideOnOverlayClick : false,
+	  enableEscapeButton : true,
+	  type : 'iframe'
+  });
+ }
+}
+function newquery(){
+  document.forms["results"].action="querybox.asp";
+  document.forms["results"].target="";
+  document.forms["results"].submit()
+}
+function show_help(topic){
+  anewwin=window.open("", "addwin", "resizable=yes,scrollbars=yes,height=300,width=500,top=0,left=0");
+  document.forms["results"].action=topic;
+  document.forms["results"].target="addwin";
+  document.forms["results"].submit()
+}
+function load_article(id){
+
+	document.forms["results"].action="full_text.asp?id="+id;
+	document.forms["results"].target="_blank";
+	document.forms["results"].submit()
+
+}
+function url_article(idid, urlnum){
+
+	document.forms["results"].action="url_article.asp";
+	document.forms["results"].did.value=idid;
+	document.forms["results"].urlnum.value=urlnum;
+	document.forms["results"].target="_blank";
+	document.forms["results"].submit()
+
+}
+function order_item(id, pr){
+
+  var frm = document.forms["results"];
+  if (0-pr>=0){
+    ret = false;
+    confirms("На Вашем счету сейчас 0 руб. \nПри открытии доступа к полному тексту данной публикации с Вашего счета будет списано " + eval(pr) + " руб.\nПодтверждаете приобретение публикации?", function(){
+    if (ret) {
+      anewwin=window.open("", "fulltext", "resizable=yes,scrollbars=yes,top=0,left=0");
+      frm.action="buy_item.asp";
+      frm.payitemid.value=id;
+      frm.target="fulltext";
+      frm.submit()
+	  }
+    })
+  }
+  else {
+    $.get('basket_add.asp?id='+id+'&userid=4733189', function(data) {
+    if (data!='') {
+      var buy1txt='';
+      var buy2txt='';
+	  var n=data.indexOf('|');
+      buy1txt=data.substring(0,n);
+      buy2txt=data.substring(n+1);
+      $('#pdf_'+id).html('<img src="/images/basket.png" width=16 height=16 vspace=3 border=0 title="Эта публикация уже в моей корзине ('+pr+' руб.)">');
+      $('#basket_num').html(encodeURIComponent(buy1txt));
+      $('#basket_sum').html(encodeURIComponent(buy2txt));
+	  $('#win_basket').slideDown(500, function(){didScroll = true;});
+	  alerts('Публикация добавлена в <a href="/basket.asp"><b>корзину</b></a>');
+      }
+    });
+  }
+
+}
+function goto_page(pnum){
+  var frm = document.forms["results"];
+  frm.pagenum.value=pnum;
+  frm.action="author_items.asp";
+  frm.target="";
+  frm.submit()
+}
+
+function author_items_print(){
+  var frm = document.forms["results"];
+  anewwin=window.open("", "author_items_print524702", "resizable=yes,scrollbars=yes,menubar=yes,height=600,width=700,top=50,left=50");
+  frm.action="author_items_print.asp";
+  frm.target="author_items_print524702";
+  frm.submit()
+}
+
+
+
+function show_author_refs(iid){
+
+  window.location.href="author_refs.asp?authorid=" + iid
+
+}
+
+
+function isVisible(tag) {
+    var t = $(tag);
+    var w = $(window);
+    var wt = w.scrollTop();
+    var tt = t.offset().top;
+    var tb = tt + t.height();
+    return ((tb <= wt + w.height()) && (tt >= wt));
+}
+function pdf_icon(b) {
+  if (!b.prop("shown") && isVisible(b)) {
+    b.prop("shown", true);
+    b.load("ispdf.asp?itemid=" + b.attr('name').substring(4) + "&rand=" + Math.random());
+  }
+}
+function get_pdfs(){
+  $('div[id^="pdf_"]:not(prop("shown"))').each(function(){
+    pdf_icon($(this))
+  });
+}
+setInterval(function() {
+  if ( didScroll2 ) {
+	didScroll2=false;
+	get_pdfs();
+    }
+ }, 200);
+
+</script>
+<style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Hover_Arrow {position: absolute; width: 15px; height: 11px; cursor: pointer}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuTitle {background-color: #CCCCCC; margin: -1px -1px 1px -1px; text-align: center; font-style: italic; font-size: 80%; color: #444444; padding: 2px 0; overflow: hidden}
+.MathJax_MenuArrow {position: absolute; right: .5em; color: #666666}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_Menu_Close {position: absolute; width: 31px; height: 31px; top: -15px; left: -15px}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style></head>
+
+<body onload="document.all.loading.style.display=&quot;none&quot;; document.all.thepage.style.display=&quot;&quot;"><div id="MathJax_Message" style="display: none;"></div>
+
+<div id="loading" style="position: absolute; width: 100%; text-align: center; top: 300px; display: none;">
+Пожалуйста, подождите, <br>пока Ваш запрос будет обработан
+<br><img src="/pic/query_wait.gif" border="0" width="31" height="31" vspace="5"></div>
+
+<div id="thepage" style="">
+<table width="100%" cellpadding="0" cellspacing="0" border="0">
+<tbody><tr><td width="100%" align="center" valign="top">
+
+
+<table cellpadding="0" cellspacing="0" border="0">
+<tbody><tr><td width="170" align="left" valign="top" id="leftcol" style="width: 170px;">
+
+<table border="0" cellspacing="0" cellpadding="0" width="150">
+
+<tbody><tr><td><a href="/defaultx.asp"><img src="/images/welcome1.jpg" width="150" title="НАУЧНАЯ ЭЛЕКТРОННАЯ БИБЛИОТЕКА eLIBRARY.RU" border="0" vspace="15"></a></td></tr>
+
+
+<tr><td><a href="/defaultx.asp"><img id="elibrary_logo" src="/images/elibrary_logo2.svg" width="150" height="39" border="0" vspace="10" title="eLIBRARY.RU - НАУЧНАЯ ЭЛЕКТРОННАЯ БИБЛИОТЕКА"></a></td></tr>
+<script language="JavaScript">
+if (supportsSVG) {
+  document.getElementById("elibrary_logo").src="/images/elibrary_logo2.svg";}
+else {
+  document.getElementById("elibrary_logo").src="/images/elibrary_logo.gif";}
+</script>
+<tr><td><img src="/pic/1pix.gif" vspace="7"></td></tr>
+
+<tr><td width="100%" align="center" valign="top">
+
+<div class="left-panel">
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr><td width="100%" align="center" valign="top"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_basket').slideToggle(500, function(){didScroll = true;})" title="Состояние корзины в электронном магазине eLIBRARY.ru">КОРЗИНА</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_basket" class="collapsed">
+<div style="height: 10px;"></div>
+
+<table border="0" cellspacing="0" cellpadding="2" width="140">
+
+<tbody><tr><td width="100%" align="center" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Всего в корзине:&nbsp;</font><font color="#00008f"><b><span id="basket_num">0</span></b>&nbsp;публ.</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+&nbsp;<font color="#000000">на сумму:&nbsp;</font><font color="#00008f"><b><span id="basket_sum">0</span></b>&nbsp;руб.</font></td></tr>
+
+
+</tbody></table>
+
+<div style="height: 10px;"></div>
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr class="menub"><td align="center" width="30" valign="bottom"><a href="/basket.asp"><img src="images/basket.png" width="15" height="15" border="0"></a></td><td align="left" width="110" valign="top"><a href="/basket.asp">Содержание корзины</a></td></tr>
+</tbody></table>
+
+</div>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<script language="JavaScript">
+function check_search(){
+if (document.forms["search"].ftext.value.length > 1) {
+  var frm = document.forms["search"];
+  frm.action="/query_results.asp";
+  frm.target="";
+  frm.submit();
+  }
+else {
+  alert("Введите не менее двух символов");
+  }
+}
+function search_enter(event){ 
+  var keycode; 
+  event = event || window.event; 
+  keycode = event.keyCode || event.which;
+  if(keycode==13){
+    check_search();
+	return false;
+  }
+} 
+</script>
+<form method="post" name="search" onsubmit="return false"></form>
+<input type="hidden" name="where_fulltext" value="on">
+<input type="hidden" name="where_name" value="on">
+<input type="hidden" name="where_abstract" value="on">
+<input type="hidden" name="where_keywords" value="on">
+<input type="hidden" name="where_affiliation" value="">
+<input type="hidden" name="where_references" value="">
+<input type="hidden" name="type_article" value="on">
+<input type="hidden" name="type_disser" value="on">
+<input type="hidden" name="type_book" value="on">
+<input type="hidden" name="type_report" value="on">
+<input type="hidden" name="type_conf" value="on">
+<input type="hidden" name="type_patent" value="on">
+<input type="hidden" name="type_preprint" value="on">
+<input type="hidden" name="type_grant" value="on">
+<input type="hidden" name="type_dataset" value="on">
+<input type="hidden" name="search_freetext" value="">
+<input type="hidden" name="search_morph" value="on">
+<input type="hidden" name="search_fulltext" value="">
+<input type="hidden" name="search_open" value="">
+<input type="hidden" name="search_results" value="">
+<input type="hidden" name="titles_all" value="">
+<input type="hidden" name="authors_all" value="">
+<input type="hidden" name="rubrics_all" value="">
+<input type="hidden" name="queryboxid" value="">
+<input type="hidden" name="itemboxid" value="">
+<input type="hidden" name="begin_year" value="">
+<input type="hidden" name="end_year" value="">
+<input type="hidden" name="issues" value="all">
+<input type="hidden" name="orderby" value="rank">
+<input type="hidden" name="order" value="rev">
+<input type="hidden" name="changed" value="1">
+
+<tr><td width="100%" align="center" valign="top">
+
+<div class="left-panel">
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr><td width="100%" align="center" valign="top"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_search').slideToggle(500, function(){didScroll = true;})" title="Поиск в Научной электронной библиотеке">ПОИСК</span></b></font>
+</td></tr>
+</tbody></table>
+<div id="win_search" class="collapsed">
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr><td width="140" align="center" valign="top">
+<div style="height: 10px;"></div>
+<div class="formfr" style="width:126px;"><input type="text" id="ftext" name="ftext" value="" style="width:118px;" class="inputt" onkeypress="search_enter(event);"></div>
+<div style="height: 11px;"></div>
+
+<div class="butblue" style="width: 52px;" onclick="check_search()">Найти</div>
+
+</td></tr>
+<tr><td><img src="/pic/1pix.gif"></td></tr>
+</tbody></table>
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr class="menub"><td align="center" width="20" valign="bottom"><img src="/images/or_kv.gif" width="7" height="7" vspace="1" class="shadow"></td><td align="left" width="120" valign="top"><a href="/querybox.asp?scope=newquery">Расширенный поиск</a></td></tr>
+
+
+<tr><td colspan="2"><div style="height:3px;"></div></td></tr>
+<tr class="menub"><td align="center" width="20" valign="bottom"><img src="/images/or_kv.gif" width="7" height="7" vspace="1" class="shadow"></td><td align="left" width="120" valign="top"><a href="/neural_search.asp">Нейропоиск</a></td></tr>
+</tbody></table>
+<div style="height: 4px;"></div>
+</div>
+</div>
+
+
+
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" align="center" valign="top">
+
+<div class="left-panel">
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr><td width="100%" align="center" valign="top"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_goto').slideToggle(500, function(){didScroll = true;})" title="Быстрый переход на популярные страницы сайта">НАВИГАТОР</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_goto" class="collapsed">
+<div style="height: 10px;"></div>
+
+<table border="0" cellspacing="4" cellpadding="0" width="140">
+
+<tbody><tr valign="top"><td width="25" align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left" width="115"><a href="/titles.asp">ЖУРНАЛЫ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/books.asp">КНИГИ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/patents.asp">ПАТЕНТЫ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/querybox.asp">ПОИСК</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/authors.asp">АВТОРЫ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/orgs.asp">ОРГАНИЗАЦИИ</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/keywords.asp">КЛЮЧЕВЫЕ СЛОВА</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/rubrics.asp">РУБРИКАТОР</a></td></tr>
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/region_compare.asp">РЕГИОНЫ</a></td></tr>
+
+<tr valign="top"><td align="center"><img src="/images/bl_kv.gif" border="0" width="7" height="7" hspace="3" class="shadow"></td><td align="left"><a href="/itembox.asp">ПОДБОРКИ</a></td></tr>
+
+
+</tbody></table>
+
+<div style="height: 10px;"></div>
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr class="menub"><td align="right" width="25" valign="bottom"><img src="/images/or_kv.gif" width="7" height="7" border="0" hspace="6" vspace="1" class="shadow"></td><td align="left" width="115" valign="top"><a href="/defaultx.asp">Начальная страница</a></td></tr></tbody></table>
+<div style="height: 4px;"></div>
+
+</div>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" align="center" valign="top">
+
+<div class="left-panel">
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr><td width="100%" align="center" valign="top"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_legend').slideToggle(500, function(){didScroll = true;})" title="Назначение используе">ЛЕГЕНДА</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_legend" class="expanded">
+
+<div style="height: 10px;"></div>
+<table width="100%" cellspacing="0" cellpadding="3" border="0" bgcolor="#eeeeee">
+<tbody><tr><td width="15%" align="right" valign="top"><img src="/images/download_green.png" width="16" hspace="3" border="0"></td><td width="85%" align="left" valign="middle"><font color="#00008f">Доступ к полному тексту документа открыт</font></td></tr>
+<tr><td align="right" valign="top"><img src="/images/download_blue.png" width="16" hspace="3" border="0"></td><td align="left" valign="middle"><font color="#00008f">Полный текст доступен на сайте издателя</font></td></tr>
+<tr><td align="right" valign="top"><img src="/images/download_yellow.png" width="16" hspace="3" border="0"></td><td align="left" valign="middle"><font color="#00008f">Полный текст может быть получен через систему заказа</font></td></tr>
+<tr><td align="right" valign="top"><img src="/images/download_orange.png" width="16" hspace="3" border="0"></td><td align="left" valign="middle"><font color="#00008f">Доступ к полному тексту закрыт</font></td></tr>
+<tr><td valign="top" align="center"><font color="#00008f">-</font></td><td align="left"><font color="#00008f">Если иконки нет - полный текст документа отсутствует в НЭБ</font></td></tr>
+
+<tr><td valign="top" align="right"><img src="/images/ref.png" width="16" hspace="3" border="0"></td>
+<td align="left"><font color="#00008f">Публикация из списков цитируемой литературы</font></td></tr>
+
+</tbody></table>
+
+</div></div>
+</td></tr>
+
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<script language="JavaScript">
+function end_session(){
+
+  document.forms["session"].saveuser.value="0";
+
+  document.forms["session"].action="/end_session.asp";
+  document.forms["session"].target="";
+  document.forms["session"].submit()
+}
+</script>
+<form action="/end_session.asp" method="POST" name="session"></form>
+<input type="hidden" name="saveuser" value="1">
+
+<tr><td width="100%" align="center" valign="top">
+
+<div class="left-panel">
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr><td width="100%" align="center" valign="top"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_session').slideToggle(500, function(){didScroll = true;})" title="Информация о текущей сессии пользователя">СЕССИЯ</span></b></font>
+</td></tr>
+</tbody></table>
+
+
+<div id="win_session" class="collapsed">
+<div style="height: 10px;"></div>
+
+<table border="0" cellspacing="0" cellpadding="2" width="140">
+<tbody><tr><td width="100%" align="left" valign="top">
+&nbsp;<font color="#000000">Имя пользователя:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f"><a href="author_info.asp?isold=1" title="Персональная карточка пользователя">Исаева Александра&nbsp;</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">IP-адрес компьютера:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">89.250.175.234</font></td></tr>
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Название организации:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+
+<font color="#00008f"><a href="/org_about.asp?orgsid=529">Ульяновский государственный технический университет</a></font></td></tr>
+
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Начало работы:</font></td></tr>
+
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">18.02.2026 12:11</font></td></tr>
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Время работы:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">00:02</font></td></tr>
+</tbody></table>
+
+<div style="height: 10px;"></div>
+
+<table border="0" cellspacing="3" cellpadding="0" width="140">
+<tbody><tr class="menub"><td align="right" width="30" valign="top"><img src="/images/or_kv.gif" width="7" height="7" border="0" hspace="9" vspace="1" class="shadow"></td><td align="left" width="101" valign="top"><a href="/project_user_office.asp">Личный кабинет</a></td></tr>
+<tr class="menub"><td align="right" width="30" valign="top"><img src="/images/or_kv.gif" width="7" height="7" border="0" hspace="9" vspace="1" class="shadow"></td><td align="left" width="101" valign="top"><a href="javascript:end_session()">Закрыть сессию</a></td></tr>
+
+
+</tbody></table>
+<div style="height: 4px;"></div>
+
+</div>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+
+
+<tr><td width="100%" align="center" valign="top">
+
+<div class="left-panel">
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr><td width="100%" align="center" valign="top"><font color="#F26C4F"><b><span class="expandable" onclick="$('#win_contact').slideToggle(500, function(){didScroll = true;})" title="Контактная информация Научной электронной библиотеки">КОНТАКТЫ</span></b></font>
+</td></tr>
+</tbody></table>
+
+<div id="win_contact" class="collapsed">
+<div style="height: 10px;"></div>
+
+<table border="0" cellspacing="0" cellpadding="2" width="140">
+
+
+<tbody><tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Служба поддержки:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">+7 (495) 544-2494 доб. 1<br></font>
+<font color="#00008f"><a href="mailto:support@elibrary.ru">support@elibrary.ru</a></font></td></tr>
+
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Издателям журналов:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">+7 (495) 544-2494 доб. 2<br></font>
+<font color="#00008f"><a href="mailto:publish@elibrary.ru">publish@elibrary.ru</a></font></td></tr>
+
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Издателям книг:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">+7 (495) 544-2494 доб. 3<br></font>
+<font color="#00008f"><a href="mailto:book@elibrary.ru">book@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Science Space для издательств:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">+7 (495) 544-2494 доб. 4<br></font>
+<font color="#00008f"><a href="mailto:info@sciencespace.ru">info@sciencespace.ru</a></font></td></tr>
+
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Science Index для организаций:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">+7 (495) 544-2494 доб. 4<br></font>
+<font color="#00008f"><a href="mailto:org@scienceindex.ru">org@scienceindex.ru</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Доступ к API:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">+7 (495) 544-2494 доб. 4<br></font>
+<font color="#00008f"><a href="mailto:api@elibrary.ru">api@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Подписчикам:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">+7 (495) 544-2494 доб. 6<br></font>
+<font color="#00008f"><a href="mailto:sales.team@elibrary.ru">sales.team@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Конференции, семинары:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f">+7 (495) 544-2494 доб. 7<br></font>
+<font color="#00008f"><a href="mailto:conf@elibrary.ru">conf@elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Почтовый адрес:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f"><a href="/contact_new.asp">117246, г. Москва,
+Научный проезд, д. 14А, стр. 3, таунхаус 1</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Веб-сайт:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f"><a href="https://elibrary.ru">https://elibrary.ru</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Telegram-канал:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f"><a href="https://t.me/elibrary_ru_official" target="_blank">t.me/elibrary_ru_official</a></font></td></tr>
+
+<tr><td width="100%" align="left" valign="top">
+<div style="height: 2px;"></div>
+&nbsp;<font color="#000000">Размещение рекламы:</font></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<font color="#00008f"><a href="mailto:reklama@elibrary.ru">reklama@elibrary.ru</a></font></td></tr>
+
+</tbody></table>
+
+<div style="height: 10px;"></div>
+
+<table border="0" cellspacing="0" cellpadding="0" width="140">
+<tbody><tr class="menub"><td align="right" width="30" valign="bottom"><img src="/images/or_kv.gif" width="7" height="7" border="0" hspace="6" vspace="1" class="shadow"></td><td align="left" width="110" valign="top"><a href="/contact_new.asp">Схема проезда</a></td></tr>
+
+<tr class="menub"><td align="right" width="30" valign="bottom"><img src="/images/or_kv.gif" width="7" height="7" border="0" hspace="6" vspace="1" class="shadow"></td><td align="left" width="110" valign="top"><a href="https://support.elibrary.ru">Задать вопрос</a></td></tr>
+
+<tr class="menub"><td align="right" width="30" valign="bottom"><img src="/images/or_kv.gif" width="7" height="7" border="0" hspace="6" vspace="1" class="shadow"></td><td align="left" width="110" valign="top"><a href="/vacancy.asp">Вакансии</a></td></tr>
+
+</tbody></table>
+<div style="height: 4px;"></div>
+
+</div>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+<tr><td width="100%" align="center" valign="top">
+<div style="width: 140px;" class="help-panel">
+<table width="140" cellspacing="0" cellpadding="3" border="0">
+<tbody><tr><td width="15%" align="right" valign="top">
+<img src="/images/but_orange_i.gif" width="15" height="15" hspace="0" border="0"></td>
+<td width="85%" align="left" valign="middle"><font color="#00008f">По всем вопросам, связанным с работой в системе Science Index, обращайтесь, пожалуйста, в службу поддержки:<br><br>
++7 (495) 544-2494<br><a href="mailto:support@elibrary.ru">support@elibrary.ru</a></font>
+</td></tr>
+</tbody></table>
+</div>
+</td></tr>
+
+<tr><td><img src="/pic/1pix.gif" vspace="9"></td></tr>
+
+
+</tbody></table>
+
+</td><td align="left" valign="top">
+
+<form method="post" name="results" onsubmit="return false">
+
+<table border="0" cellspacing="0" cellpadding="0">
+<tbody><tr><td width="600" align="left" valign="top">
+
+<table width="580" border="0" cellspacing="0" cellpadding="0">
+<tbody><tr><td width="100%" align="left" valign="top">
+
+<div class="header-panel">
+<div style="margin: 0; border: 0; padding: 0 0 5px 0; text-align: center; font-size: 9pt;"><font color="#5674b9"><b>СПИСОК ПУБЛИКАЦИЙ АВТОРА</b></font></div>
+</div>
+
+</td></tr></tbody></table>
+
+</td><td width="200" align="right" valign="middle" id="rightcol" style="width: 200px;">
+
+
+<table width="200" cellspacing="0" cellpadding="3" border="0">
+<tbody><tr><td width="12%" align="right" valign="top">
+<a href="https://t.me/elibrary_ru_official/76" target="_blank"><img src="/images/telegram.svg" width="24" height="24" border="0"></a></td>
+<td width="88%" align="left" valign="middle"><font color="#00008f"><a href="https://t.me/elibrary_ru_official/76" target="_blank">Открыт раздел аналитики по регионам</a></font>
+</td></tr>
+</tbody></table>
+</td></tr>
+
+
+<tr><td align="left" valign="top">
+
+<table width="580" border="0" cellspacing="0" cellpadding="0">
+
+<input type="hidden" name="itembox_name" value="">
+<input type="hidden" name="auth" value="">
+<input type="hidden" name="authorid" value="524702">
+<input type="hidden" name="authorhash" value="Тронин В Г">
+<input type="hidden" name="pagenum" value="1">
+<input type="hidden" name="add_all" value="">
+<input type="hidden" name="paysum" value="">
+<input type="hidden" name="slight" value="">
+<input type="hidden" name="show_refs" value="1">
+<input type="hidden" name="hide_doubles" value="1">
+<input type="hidden" name="items_all" value="">
+<input type="hidden" name="publs_all" value="">
+<input type="hidden" name="did" value="1">
+<input type="hidden" name="urlnum" value="1">
+<input type="hidden" name="listid" value="">
+
+<tbody><tr><td width="100%" align="left" valign="top">
+
+<div style="width:540px; margin:0 20px 20px 20px; border:0; padding:0; text-align: center; font-size: 9pt;">
+<font color="#F26C4F"><b>ТРОНИН ВАДИМ ГЕОРГИЕВИЧ</b></font>  <span class="aster" title="Автор зарегистрирован в SCIENCE INDEX">*</span>
+<br><a href="org_about.asp?orgsid=529">Ульяновский государственный технический университет</a>, кафедра информационные системы (Ульяновск)
+
+</div>
+
+<div class="form-panel">
+
+<div style="margin:0; border:0; padding:0;">
+<font color="#F26C4F"><b><span class="expandable" onclick="$('#show_param').slideToggle(500, function(){didScroll = true;})" title="Показать/скрыть параметры поиска">ПАРАМЕТРЫ</span></b></font>
+</div>
+
+<div id="show_param" class="expanded">
+
+<div style="height:5px;"></div>
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_rubrics" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_rubrics">ТЕМАТИКА</span></font><span id="rubricsheader" name="rubricsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="rubrics" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="rubric_order" style="width:168px;" class="input" id="rubric_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по названию рубрики
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;rubric&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;rubric&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="rubrics_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_titles" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_titles">ЖУРНАЛЫ</span></font><span id="titlesheader" name="titlesheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="titles" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="title_order" style="width:168px" class="input" id="title_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по названию журнала
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;title&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;title&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="titles_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_orgs" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_orgs">ОРГАНИЗАЦИИ</span></font><span id="orgsheader" name="orgsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="orgs" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="org_order" style="width:168px" class="input" id="org_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по названию организации
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;org&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;org&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="orgs_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_authors" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_authors">АВТОРЫ</span></font><span id="authorsheader" name="authorsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="authors" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="author_order" style="width:168px" class="input" id="author_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по фамилии
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;author&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;author&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="authors_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_years" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_years">ГОДЫ</span></font><span id="yearsheader" name="yearsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="years" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="year_order" style="width:168px" class="input" id="year_order">
+<option value="0">по числу публикаций
+</option><option value="1" selected="">по году
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;year&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;year&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="years_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_types" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_types">ТИП ПУБЛИКАЦИИ</span></font><span id="typesheader" name="typesheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="types" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="type_order" style="width:168px" class="input" id="type_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по типу публикации
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;type&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;type&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="types_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_cats" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_cats">КАТЕГОРИЯ ПУБЛИКАЦИИ</span></font><span id="catsheader" name="catsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="cats" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="cat_order" style="width:168px" class="input" id="cat_order">
+<option value="0">по числу цитирований
+</option><option value="1" selected="">по категории публикации
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;cat&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;cat&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="cats_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_roles" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_roles">УЧАСТИЕ В ПУБЛИКАЦИИ</span></font><span id="rolesheader" name="rolesheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="roles" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="role_order" style="width:168px" class="input" id="role_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по способу участия
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;role&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;role&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="roles_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="middle" class="menus"><td width="30" align="right" valign="middle"><div id="txt_keywords" class="win_expandable" style="color:#F26C4F;">▼</div></td><td width="481" align="left" valign="middle"><font color="#00008f">&nbsp;&nbsp;<span class="expandable" id="hdr_keywords">КЛЮЧЕВЫЕ СЛОВА</span></font><span id="keywordsheader" name="keywordsheader" style="color: #777777; padding: 10px;"></span></td></tr></tbody></table>
+
+<div id="keywords" class="collapsed1" style="display: none; border:0; padding:0; margin:5px 0 0 0;">
+<table width="517" cellspacing="0" cellpadding="0" border="0" bgcolor="#5674b9">
+<tbody><tr><td width="107" align="right" valign="middle"><font color="#ffffff">Сортировка:</font>&nbsp;&nbsp;</td><td width="170" align="left" valign="middle"><select name="keyword_order" style="width:168px" class="input" id="keyword_order">
+<option value="0" selected="">по числу публикаций
+</option><option value="1">по ключевому слову
+</option><option value="2">выделенные в начале
+</option></select></td><td width="110" align="right" valign="middle" class="menus"><a href="javascript:select_options(&quot;keyword&quot;)">Выделить все</a></td><td width="130" align="center" valign="middle" class="menus"><a href="javascript:deselect_options(&quot;keyword&quot;)">Снять выделение</a></td></tr>
+</tbody></table>
+<div id="keywords_options" style="height:50px; padding:0px; overflow:auto; width:517px; background:#f5f5f5; margin:10px 0 10px 0;">
+</div></div>
+
+<div style="height:5px;">&nbsp;</div>
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="top" class="menus"><td width="514" align="left" valign="top"><font color="#00008f">&nbsp;&nbsp;Показывать:</font></td></tr>
+<tr><td align="left" valign="top">
+<div class="formfr"><select id="show_hash" name="show_hash" style="width:510px" class="input" onkeypress="submit_enter(event)">
+<option value="0" selected="">включенные в список работ автора (привязанные) публикации
+</option><option value="1">непривязанные публикации, которые могут принадлежать данному автору
+
+</option></select></div></td></tr>
+</tbody></table>
+
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr><td align="right" width="24"><input type="checkbox" name="check_show_refs" id="check_show_refs" checked="" onclick="if (this.checked) {document.forms[&quot;results&quot;].show_refs.value=&quot;1&quot;;} else {document.forms[&quot;results&quot;].show_refs.value=&quot;0&quot;;}"></td><td align="left" width="484">- учитывать публикации, извлеченные из списков цитируемой литературы&nbsp;<img src="/images/but_orange_question.gif" class="imghelp help"></td></tr>
+<tr><td align="right" width="24"><input type="checkbox" name="check_hide_doubles" id="check_hide_doubles" checked="" onclick="if (this.checked) {document.forms[&quot;results&quot;].hide_doubles.value=&quot;1&quot;;} else {document.forms[&quot;results&quot;].hide_doubles.value=&quot;0&quot;;}"></td><td align="left" width="484">- объединять оригинальные и переводные версии статей и переиздания книг&nbsp;<img src="/images/but_orange_question.gif" class="imghelp help"></td></tr>
+</tbody></table>
+
+<div style="height:5px;"></div>
+<table width="520" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr valign="top" class="menus"><td width="170" align="left" valign="top"><font color="#00008f">&nbsp;&nbsp;Сортировка:</font></td><td width="15"></td><td width="139" align="left" valign="top"><font color="#00008f">&nbsp;&nbsp;Порядок:</font></td><td width="15"></td><td width="80"></td><td width="80"></td></tr>
+<tr align="left" valign="top">
+<td><div class="formfr"><select id="sortorder" name="sortorder" style="width:166px" class="input" onchange="var ord = document.forms[&quot;results&quot;].order; switch(this.value) {case &quot;0&quot; : ord.value=&quot;1&quot;; break; case &quot;1&quot; : ord.value=&quot;0&quot;; break; case &quot;6&quot; : ord.value=&quot;1&quot;; break; case &quot;2&quot; : ord.value=&quot;1&quot;; break; case &quot;3&quot; : ord.value=&quot;1&quot;; break; case &quot;4&quot; : ord.value=&quot;1&quot;; break; case &quot;5&quot; : ord.value=&quot;0&quot;; break; case &quot;7&quot; : ord.value=&quot;1&quot;; break; }" onkeypress="submit_enter(event)">
+<option value="0" selected="">по дате выпуска
+</option><option value="1">по названию публикации
+</option><option value="2">по году и первому автору
+</option><option value="6">по году и названию
+</option><option value="5">по первому автору
+</option><option value="3">по числу цитирований
+</option><option value="4">по дате размещения
+</option><option value="7">по тематической близости
+</option></select></div></td>
+<td></td>
+<td><div class="formfr"><select id="order" name="order" style="width:135px" class="input" onkeypress="submit_enter(event)">
+<option value="0">по возрастанию
+</option><option value="1" selected="">по убыванию
+</option></select></div></td>
+<td></td>
+<td align="left" valign="middle">
+<div class="butblue" style="width: 67px;" onclick="reset_form()">Очистить</div>
+</td>
+<td align="right" valign="middle">
+<div class="butred" style="width: 67px;" onclick="pub_search()">Поиск</div>
+</td>
+</tr>
+</tbody></table>
+
+<div style="height:8px;"></div>
+</div>
+</div>
+
+
+<a name="list"></a>
+<div style="width: 480px; margin: 10px 0 10px 30px; border: 0; padding: 10px 20px 7px 20px; text-align: center;">
+<table width="480" cellspacing="3" cellpadding="0" border="0">
+<tbody><tr><td width="40" align="right" valign="top"><img src="images/but_orange_i.gif" width="15" height="15" hspace="10" border="0"></td><td width="431" align="left" valign="top" class="redref"><font color="#00008f">Всего найдено</font> <b><font color="#ff0000">139</font></b> <font color="#00008f">публикаций с общим количеством цитирований: </font><b><font color="#ff0000"><span id="totalcited">362</span></font></b><font color="#00008f">.<br>Показано на данной странице: с <b>1</b> по <b>100</b>.</font></td></tr></tbody></table>
+</div>
+
+<table width="580" cellspacing="0" cellpadding="3" id="restab" style="border-spacing: 0px 4px; table-layout: fixed;">
+<tbody><tr align="center" valign="middle" height="15">
+<td width="28"><font color="#555555">&nbsp;<b>№</b></font></td>
+<td width="510"><font color="#555555"><b>Публикация</b></font></td>
+<td width="24"><span title="Число цитирований публикации в РИНЦ"><font color="#555555"><b>Цит.</b></font></span></td></tr>
+<tr><td colspan="3">
+<div style="width: 574px;" class="table-line"></div>
+</td></tr>
+
+<tr><td colspan="3" height="0"></td></tr>
+
+
+<tr valign="middle" id="arw88846568">
+<td align="center" valign="top" class="select-tr-left"><a name="x88846568"></a>
+<font color="#00008f"><b>1.</b></font><br><input type="checkbox" name="tid88846568" id="tid88846568" onclick="if (this.checked) {RowSelect(&quot;arw88846568&quot;,1)} else {RowSelect(&quot;arw88846568&quot;,0)}"><div id="pdf_88846568" name="pdf_88846568"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=88846568"><b><span style="line-height:1.0;">СОВРЕМЕННЫЕ ПРОБЛЕМЫ ПРОЕКТИРОВАНИЯ, ПРОИЗВОДСТВА И ЭКСПЛУАТАЦИИ РАДИОТЕХНИЧЕСКИХ СИСТЕМ</span></b></a><br>
+<font color="#00008f">
+
+Сборник научных трудов / Выпуск 16.  Ульяновск, 2025. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw83980228">
+<td align="center" valign="top" class="select-tr-left"><a name="x83980228"></a>
+<font color="#00008f"><b>2.</b></font><br><input type="checkbox" name="tid83980228" id="tid83980228" onclick="if (this.checked) {RowSelect(&quot;arw83980228&quot;,1)} else {RowSelect(&quot;arw83980228&quot;,0)}"><div id="pdf_83980228" name="pdf_83980228"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=83980228"><b><span style="line-height:1.0;">СТАТИСТИЧЕСКИЕ ИССЛЕДОВАНИЯ КОМПЛЕКСА СИСТЕМ ЦЕНТРАЛИЗОВАННОГО СОПРОВОЖДЕНИЯ ФУНКЦИОНИРОВАНИЯ СИНТЕТИЧЕСКИХ СОЖ НА ЗАВОДЕ ДВИГАТЕЛЕЙ</span></b></a><br><font color="#00008f"><i>Булыжев Е.М., Алякин Ю.Б., Клячкин В.Н., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=83980207">Системы. Методы. Технологии</a>. 
+2025. <a href="/contents.asp?id=83980207&amp;selid=83980228">№&nbsp;4&nbsp;(68)</a>.  С. 64-72.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw74514537">
+<td align="center" valign="top" class="select-tr-left"><a name="x74514537"></a>
+<font color="#00008f"><b>3.</b></font><br><input type="checkbox" name="tid74514537" id="tid74514537" onclick="if (this.checked) {RowSelect(&quot;arw74514537&quot;,1)} else {RowSelect(&quot;arw74514537&quot;,0)}"><div id="pdf_74514537" name="pdf_74514537"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=74514537"><b><span style="line-height:1.0;">ВУЗОВСКАЯ НАУКА В СОВРЕМЕННЫХ УСЛОВИЯХ</span></b></a><br>
+<font color="#00008f">
+
+Сборник материалов 58-й научно-технической конференции. В 2-х частях / Часть 1.  Ульяновск, 2024. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw75218409">
+<td align="center" valign="top" class="select-tr-left"><a name="x75218409"></a>
+<font color="#00008f"><b>4.</b></font><br><input type="checkbox" name="tid75218409" id="tid75218409" onclick="if (this.checked) {RowSelect(&quot;arw75218409&quot;,1)} else {RowSelect(&quot;arw75218409&quot;,0)}"><div id="pdf_75218409" name="pdf_75218409"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=75218409"><b><span style="line-height:1.0;">СОВРЕМЕННЫЕ ПРОБЛЕМЫ ПРОЕКТИРОВАНИЯ, ПРОИЗВОДСТВА И ЭКСПЛУАТАЦИИ РАДИОТЕХНИЧЕСКИХ СИСТЕМ</span></b></a><br>
+<font color="#00008f">
+
+Сборник научных трудов / Пятнадцатый выпуск.  Ульяновск, 2024. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw75219837">
+<td align="center" valign="top" class="select-tr-left"><a name="x75219837"></a>
+<font color="#00008f"><b>5.</b></font><br><input type="checkbox" name="tid75219837" id="tid75219837" onclick="if (this.checked) {RowSelect(&quot;arw75219837&quot;,1)} else {RowSelect(&quot;arw75219837&quot;,0)}"><div id="pdf_75219837" name="pdf_75219837"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=75219837"><b><span style="line-height:1.0;">ВУЗОВСКАЯ НАУКА В СОВРЕМЕННЫХ УСЛОВИЯХ</span></b></a><br>
+<font color="#00008f">
+
+Сборник материалов 58-й научно-технической конференции. В 2-х частях / Часть 2 
+.  Ульяновск, 2024. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw75186059">
+<td align="center" valign="top" class="select-tr-left"><a name="x75186059"></a>
+<font color="#00008f"><b>6.</b></font><br><input type="checkbox" name="tid75186059" id="tid75186059" onclick="if (this.checked) {RowSelect(&quot;arw75186059&quot;,1)} else {RowSelect(&quot;arw75186059&quot;,0)}"><div id="pdf_75186059" name="pdf_75186059"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=75186059"><b><span style="line-height:1.0;">АНАЛИЗ НАИБОЛЕЕ ЦИТИРУЕМЫХ В РИНЦ ПУБЛИКАЦИЙ УЛГТУ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=75186058">Вестник Ульяновского государственного технического университета</a>. 
+2024. <a href="/contents.asp?id=75186058&amp;selid=75186059">№&nbsp;2&nbsp;(106)</a>.  С. 4-13.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw54328675">
+<td align="center" valign="top" class="select-tr-left"><a name="x54328675"></a>
+<font color="#00008f"><b>7.</b></font><br><input type="checkbox" name="tid54328675" id="tid54328675" onclick="if (this.checked) {RowSelect(&quot;arw54328675&quot;,1)} else {RowSelect(&quot;arw54328675&quot;,0)}"><div id="pdf_54328675" name="pdf_54328675"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=54328675"><b><span style="line-height:1.0;">ВУЗОВСКАЯ НАУКА В СОВРЕМЕННЫХ УСЛОВИЯХ</span></b></a><br>
+<font color="#00008f">
+
+сборник материалов 57-й научно-технической конференции /  Том  Часть 2.  Ульяновск, 2023. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw49855261">
+<td align="center" valign="top" class="select-tr-left"><a name="x49855261"></a>
+<font color="#00008f"><b>8.</b></font><br><input type="checkbox" name="tid49855261" id="tid49855261" onclick="if (this.checked) {RowSelect(&quot;arw49855261&quot;,1)} else {RowSelect(&quot;arw49855261&quot;,0)}"><div id="pdf_49855261" name="pdf_49855261"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=49855261"><b><span style="line-height:1.0;">ФОТОГРАММЕТРИЯ И ДИСТАНЦИОННОЕ ЗОНДИРОВАНИЕ</span></b></a><br><font color="#00008f"><i>Ерофеев С.Е., Хвостов Н.В., Ермошкин Ю.В.</i></font><br>
+<font color="#00008f">
+
+учебное пособие для студентов факультета агротехнологий, земельных ресурсов и пищевых производств направление подготовки 21.03.02 «Землеустройство и кадастры» /  Ульяновск, 2022. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw50421225">
+<td align="center" valign="top" class="select-tr-left"><a name="x50421225"></a>
+<font color="#00008f"><b>9.</b></font><br><input type="checkbox" name="tid50421225" id="tid50421225" onclick="if (this.checked) {RowSelect(&quot;arw50421225&quot;,1)} else {RowSelect(&quot;arw50421225&quot;,0)}"><div id="pdf_50421225" name="pdf_50421225"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=50421225"><b><span style="line-height:1.0;">СОВРЕМЕННЫЕ ПРОБЛЕМЫ ПРОЕКТИРОВАНИЯ, ПРОИЗВОДСТВА И ЭКСПЛУАТАЦИИ РАДИОТЕХНИЧЕСКИХ СИСТЕМ</span></b></a><br>
+<font color="#00008f">
+
+Сборник научных трудов /  Том  Выпуск 14.  Ульяновск, 2022. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw48768226">
+<td align="center" valign="top" class="select-tr-left"><a name="x48768226"></a>
+<font color="#00008f"><b>10.</b></font><br><input type="checkbox" name="tid48768226" id="tid48768226" onclick="if (this.checked) {RowSelect(&quot;arw48768226&quot;,1)} else {RowSelect(&quot;arw48768226&quot;,0)}"><div id="pdf_48768226" name="pdf_48768226"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=48768226"><b><span style="line-height:1.0;">ВУЗОВСКАЯ НАУКА В СОВРЕМЕННЫХ УСЛОВИЯХ</span></b></a><br>
+<font color="#00008f">
+
+Сборник материалов 56-й научно-технической конференции. В 2-х частях /  Том  Часть 1.  Ульяновск, 2022. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw50321424">
+<td align="center" valign="top" class="select-tr-left"><a name="x50321424"></a>
+<font color="#00008f"><b>11.</b></font><br><input type="checkbox" name="tid50321424" id="tid50321424" onclick="if (this.checked) {RowSelect(&quot;arw50321424&quot;,1)} else {RowSelect(&quot;arw50321424&quot;,0)}"><div id="pdf_50321424" name="pdf_50321424"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=50321424"><b><span style="line-height:1.0;">ВУЗОВСКАЯ НАУКА В СОВРЕМЕННЫХ УСЛОВИЯХ</span></b></a><br>
+<font color="#00008f">
+
+Сборник материалов 56-й научно-технической конференции. В 2-х частях /  Том  Часть 2.  Ульяновск, 2022. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw48450282">
+<td align="center" valign="top" class="select-tr-left"><a name="x48450282"></a>
+<font color="#00008f"><b>12.</b></font><br><input type="checkbox" name="tid48450282" id="tid48450282" onclick="if (this.checked) {RowSelect(&quot;arw48450282&quot;,1)} else {RowSelect(&quot;arw48450282&quot;,0)}"><div id="pdf_48450282" name="pdf_48450282"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=48450282"><b><span style="line-height:1.0;">АНАЛИЗ МЕТРИК НАУЧНОГО НАСЛЕДИЯ ПО БАЗАМ НАУЧНЫХ ПУБЛИКАЦИЙ НА ПРИМЕРЕ МАТЕМАТИКОВ УЛГТУ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=48450273">Вестник Ульяновского государственного технического университета</a>. 
+2022. <a href="/contents.asp?id=48450273&amp;selid=48450282">№&nbsp;1&nbsp;(97)</a>.  С. 46-63.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=48450282" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw45547461">
+<td align="center" valign="top" class="select-tr-left"><a name="x45547461"></a>
+<font color="#00008f"><b>13.</b></font><br><input type="checkbox" name="tid45547461" id="tid45547461" onclick="if (this.checked) {RowSelect(&quot;arw45547461&quot;,1)} else {RowSelect(&quot;arw45547461&quot;,0)}"><div id="pdf_45547461" name="pdf_45547461"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=45547461"><b><span style="line-height:1.0;">СРАВНЕНИЕ ЭЛЕКТРОННЫХ НАУЧНЫХ БИБЛИОТЕК ELIBRARY.RU И АКАДЕМИИ GOOGLE ПО ПРЕДСТАВЛЕНИЮ ПУБЛИКАЦИЙ УЧЁНЫХ УЛГТУ НА ОСНОВЕ ИХ ПОКАЗАТЕЛЕЙ С ПРИМЕНЕНИЕМ ГРУППИРОВКИ</span></b></a><br><font color="#00008f"><i>Курмыза П.С., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: ИНФОРМАТИКА, МОДЕЛИРОВАНИЕ, АВТОМАТИЗАЦИЯ ПРОЕКТИРОВАНИЯ (ИМАП-2020).&nbsp;XII Международная научно-практическая конференция студентов, аспирантов и молодых ученых : сборник научных трудов. Ульяновск, 2021.  С. 104-111.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=45547461" title="Список публикаций, цитирующих данную">2</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw45547467">
+<td align="center" valign="top" class="select-tr-left"><a name="x45547467"></a>
+<font color="#00008f"><b>14.</b></font><br><input type="checkbox" name="tid45547467" id="tid45547467" onclick="if (this.checked) {RowSelect(&quot;arw45547467&quot;,1)} else {RowSelect(&quot;arw45547467&quot;,0)}"><div id="pdf_45547467" name="pdf_45547467"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=45547467"><b><span style="line-height:1.0;">СРАВНЕНИЕ ЭФФЕКТИВНОСТИ МЕТОДОВ ОПТИМИЗАЦИИ 3D-МОДЕЛЕЙ</span></b></a><br><font color="#00008f"><i>Мытарин Е.С., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: ИНФОРМАТИКА, МОДЕЛИРОВАНИЕ, АВТОМАТИЗАЦИЯ ПРОЕКТИРОВАНИЯ (ИМАП-2020).&nbsp;XII Международная научно-практическая конференция студентов, аспирантов и молодых ученых : сборник научных трудов. Ульяновск, 2021.  С. 140-144.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw48005278">
+<td align="center" valign="top" class="select-tr-left"><a name="x48005278"></a>
+<font color="#00008f"><b>15.</b></font><br><input type="checkbox" name="tid48005278" id="tid48005278" onclick="if (this.checked) {RowSelect(&quot;arw48005278&quot;,1)} else {RowSelect(&quot;arw48005278&quot;,0)}"><div id="pdf_48005278" name="pdf_48005278"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=48005278"><b><span style="line-height:1.0;">СОВРЕМЕННЫЕ ПРОБЛЕМЫ ПРОЕКТИРОВАНИЯ, ПРОИЗВОДСТВА И ЭКСПЛУАТАЦИИ РАДИОТЕХНИЧЕСКИХ СИСТЕМ</span></b></a><br>
+<font color="#00008f">
+
+Сборник научных трудов /  Том  Выпуск 13.  Ульяновск, 2021. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw45547426">
+<td align="center" valign="top" class="select-tr-left"><a name="x45547426"></a>
+<font color="#00008f"><b>16.</b></font><br><input type="checkbox" name="tid45547426" id="tid45547426" onclick="if (this.checked) {RowSelect(&quot;arw45547426&quot;,1)} else {RowSelect(&quot;arw45547426&quot;,0)}"><div id="pdf_45547426" name="pdf_45547426"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=45547426"><b><span style="line-height:1.0;">АНАЛИЗ СТЕПЕНИ СХОДСТВА ДАННЫХ О НАУЧНОЙ ДЕЯТЕЛЬНОСТИ АВТОРОВ УЛГТУ В ELIBRARY И RESEARCHGATE ПО КЛЮЧЕВЫМ СЛОВАМ</span></b></a><br><font color="#00008f"><i>Абанин Д.А., Ильбеков Д.С., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: ИНФОРМАТИКА, МОДЕЛИРОВАНИЕ, АВТОМАТИЗАЦИЯ ПРОЕКТИРОВАНИЯ (ИМАП-2020).&nbsp;XII Международная научно-практическая конференция студентов, аспирантов и молодых ученых : сборник научных трудов. Ульяновск, 2021.  С. 7-11.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=45547426" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw47143050">
+<td align="center" valign="top" class="select-tr-left"><a name="x47143050"></a>
+<font color="#00008f"><b>17.</b></font><br><input type="checkbox" name="tid47143050" id="tid47143050" onclick="if (this.checked) {RowSelect(&quot;arw47143050&quot;,1)} else {RowSelect(&quot;arw47143050&quot;,0)}"><div id="pdf_47143050" name="pdf_47143050"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=47143050"><b><span style="line-height:1.0;">ПРЕДСТАВЛЕНИЕ МАТЕМАТИЧЕСКИХ ПУБЛИКАЦИЙ ОРГАНИЗАЦИИ В СПЕЦИАЛИЗИРОВАННЫХ БАЗАХ ZBMATH, MATHSCINET, MATHNET.RU ПО СРАВНЕНИЮ С WEB OF SCIENCE, SCOPUS И РИНЦ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=47143041">Вестник Ульяновского государственного технического университета</a>. 
+2021. <a href="/contents.asp?id=47143041&amp;selid=47143050">№&nbsp;2&nbsp;(94)</a>.  С. 44-54.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=47143050" title="Список публикаций, цитирующих данную">2</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw44097435">
+<td align="center" valign="top" class="select-tr-left"><a name="x44097435"></a>
+<font color="#00008f"><b>18.</b></font><br><input type="checkbox" name="tid44097435" id="tid44097435" onclick="if (this.checked) {RowSelect(&quot;arw44097435&quot;,1)} else {RowSelect(&quot;arw44097435&quot;,0)}"><div id="pdf_44097435" name="pdf_44097435"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=44097435"><b><span style="line-height:1.0;">ИНФОРМАЦИОННО-ЦИФРОВОЕ НЕРАВЕНСТВО НАСЕЛЕНИЯ И СПОСОБЫ ЕГО ПРЕОДОЛЕНИЯ В РЕГИОНЕ</span></b></a><br><font color="#00008f"><i>Шиняева О.В., Ахметшина Е.Р., Клюева Т.В., Полетаева О.В., Слепова О.М., Тронин В.Г., Холкина К.Д.</i></font><br>
+<font color="#00008f">
+
+ Ульяновск, 2020. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=44097435" title="Список публикаций, цитирующих данную">7</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw43299879">
+<td align="center" valign="top" class="select-tr-left"><a name="x43299879"></a>
+<font color="#00008f"><b>19.</b></font><br><input type="checkbox" name="tid43299879" id="tid43299879" onclick="if (this.checked) {RowSelect(&quot;arw43299879&quot;,1)} else {RowSelect(&quot;arw43299879&quot;,0)}"><div id="pdf_43299879" name="pdf_43299879"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=43299879"><b><span style="line-height:1.0;">FRAMEWORK FOR ANALYSIS OF THEMATIC INTEREST IN SCIENTIFIC NETWORKS USING FUZZY TIME SERIES</span></b></a><br><font color="#00008f"><i>Afanasieva T.V., Tronin V.G., Afanaseva N.A.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: ACM International Conference Proceeding Series.&nbsp;Proceedings of the 2020 6th International Conference on Computer and Technology Applications, ICCTA 2020. 2020.  С. 134-138.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw44238558">
+<td align="center" valign="top" class="select-tr-left"><a name="x44238558"></a>
+<font color="#00008f"><b>20.</b></font><br><input type="checkbox" name="tid44238558" id="tid44238558" onclick="if (this.checked) {RowSelect(&quot;arw44238558&quot;,1)} else {RowSelect(&quot;arw44238558&quot;,0)}"><div id="pdf_44238558" name="pdf_44238558"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=44238558"><b><span style="line-height:1.0;">СОВРЕМЕННЫЕ ПРОБЛЕМЫ ПРОЕКТИРОВАНИЯ, ПРОИЗВОДСТВА И ЭКСПЛУАТАЦИИ РАДИОТЕХНИЧЕСКИХ СИСТЕМ</span></b></a><br>
+<font color="#00008f">
+
+Сборник научных трудов /  Том  Выпуск 12.  Ульяновск, 2020. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw45634224">
+<td align="center" valign="top" class="select-tr-left"><a name="x45634224"></a>
+<font color="#00008f"><b>21.</b></font><br><input type="checkbox" name="tid45634224" id="tid45634224" onclick="if (this.checked) {RowSelect(&quot;arw45634224&quot;,1)} else {RowSelect(&quot;arw45634224&quot;,0)}"><div id="pdf_45634224" name="pdf_45634224"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=45634224"><b><span style="line-height:1.0;">МЕТОДОЛОГИЯ НАУЧНЫХ ИССЛЕДОВАНИЙ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Сафиуллин А.Р.</i></font><br>
+<font color="#00008f">
+
+учебное пособие /  Ульяновск, 2020. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=45634224" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw43576690">
+<td align="center" valign="top" class="select-tr-left"><a name="x43576690"></a>
+<font color="#00008f"><b>22.</b></font><br><input type="checkbox" name="tid43576690" id="tid43576690" onclick="if (this.checked) {RowSelect(&quot;arw43576690&quot;,1)} else {RowSelect(&quot;arw43576690&quot;,0)}"><div id="pdf_43576690" name="pdf_43576690"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=43576690"><b><span style="line-height:1.0;">ДЕСКРИПТОРНАЯ МОДЕЛЬ ЛОКАЛЬНЫХ И ГЛОБАЛЬНЫХ СВОЙСТВ МНОГОМЕРНОГО ВРЕМЕННОГО РЯДА НА ОСНОВЕ НЕЧЕТКОЙ ТЕНДЕНЦИИ</span></b></a><br><font color="#00008f"><i>Афанасьева Т.В., Мошкина И.А., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Информационные технологии и нанотехнологии (ИТНТ-2020).&nbsp;Сборник трудов по материалам VI Международной конференции и молодежной школы. В 4-х томах. Под редакцией В.А. Фурсова. 2020.  С. 948-955.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw44386569">
+<td align="center" valign="top" class="select-tr-left"><a name="x44386569"></a>
+<font color="#00008f"><b>23.</b></font><br><input type="checkbox" name="tid44386569" id="tid44386569" onclick="if (this.checked) {RowSelect(&quot;arw44386569&quot;,1)} else {RowSelect(&quot;arw44386569&quot;,0)}"><div id="pdf_44386569" name="pdf_44386569"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=44386569"><b><span style="line-height:1.0;">ПОДХОД К ОБРАБОТКЕ ОБРАТНОЙ СВЯЗИ ПОЛЬЗОВАТЕЛЯ ДЛЯ ПОВЫШЕНИЯ КАЧЕСТВА РЕЗУЛЬТАТОВ РАБОТЫ АЛГОРИТМА КЛАСТЕРИЗАЦИИ</span></b></a><br><font color="#00008f"><i>Дударин П.В., Тронин В.Г., Ярушкина Н.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=44386554">Известия Самарского научного центра Российской академии наук</a>. 
+2020. Т. 22. <a href="/contents.asp?id=44386554&amp;selid=44386569">№&nbsp;5&nbsp;(97)</a>.  С. 94-105.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=44386569" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw45625214">
+<td align="center" valign="top" class="select-tr-left"><a name="x45625214"></a>
+<font color="#00008f"><b>24.</b></font><br><input type="checkbox" name="tid45625214" id="tid45625214" onclick="if (this.checked) {RowSelect(&quot;arw45625214&quot;,1)} else {RowSelect(&quot;arw45625214&quot;,0)}"><div id="pdf_45625214" name="pdf_45625214"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=45625214"><b><span style="line-height:1.0;">ЭВОЛЮЦИЯ СИСТЕМЫ ПЕРЕДАЧИ НАУЧНЫХ ЗНАНИЙ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Тибушкина Н.В.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=45625208">Вестник Ульяновского государственного технического университета</a>. 
+2020. <a href="/contents.asp?id=45625208&amp;selid=45625214">№&nbsp;4&nbsp;(92)</a>.  С. 25-30.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=45625214" title="Список публикаций, цитирующих данную">2</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw44130588">
+<td align="center" valign="top" class="select-tr-left"><a name="x44130588"></a>
+<font color="#00008f"><b>25.</b></font><br><input type="checkbox" name="tid44130588" id="tid44130588" onclick="if (this.checked) {RowSelect(&quot;arw44130588&quot;,1)} else {RowSelect(&quot;arw44130588&quot;,0)}"><div id="pdf_44130588" name="pdf_44130588"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=44130588"><b><span style="line-height:1.0;">ПРОГРАММНЫЕ СРЕДСТВА ДЛЯ АНАЛИЗА ПРИЗНАКОВ ТРАЕКТОРИИ ДВИЖЕНИЯ МОБИЛЬНОГО РОБОТА С ИСПОЛЬЗОВАНИЕМ НЕЙРОННЫХ СЕТЕЙ С ВНИМАНИЕМ</span></b></a><br><font color="#00008f"><i>Михеев А.В., Святов К.В., Лапшов Ю.А., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=44130580">Автоматизация процессов управления</a>. 
+2020. <a href="/contents.asp?id=44130580&amp;selid=44130588">№&nbsp;3&nbsp;(61)</a>.  С. 70-79.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=44130588" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw45403209">
+<td align="center" valign="top" class="select-tr-left"><a name="x45403209"></a>
+<font color="#00008f"><b>26.</b></font><br><input type="checkbox" name="tid45403209" id="tid45403209" onclick="if (this.checked) {RowSelect(&quot;arw45403209&quot;,1)} else {RowSelect(&quot;arw45403209&quot;,0)}"><div id="pdf_45403209" name="pdf_45403209"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=45403209"><b><span style="line-height:1.0;">LABOR INTENSITY EVALUATION TECHNIQUE IN SOFTWARE DEVELOPMENT PROCESS BASED ON NEURAL NETWORKS</span></b></a><br><font color="#00008f"><i>Dudarin P.V., Tronin V.G., Svyatov K.V., Belov V.A., Shakurov R.A.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=45403146">Advances in Intelligent Systems and Computing</a>. 
+2020. Т. 1156.  С. 75-84.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=45403209" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw44561103">
+<td align="center" valign="top" class="select-tr-left"><a name="x44561103"></a>
+<font color="#00008f"><b>27.</b></font><br><input type="checkbox" name="tid44561103" id="tid44561103" onclick="if (this.checked) {RowSelect(&quot;arw44561103&quot;,1)} else {RowSelect(&quot;arw44561103&quot;,0)}"><div id="pdf_44561103" name="pdf_44561103"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=44561103"><b><span style="line-height:1.0;">ОЦЕНКА РЕЗУЛЬТАТОВ НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ РАБОТЫ И НАУКОМЕТРИЯ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Сафиуллин А.Р.</i></font><br>
+<font color="#00008f">
+
+ Ульяновск, 2019. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=44561103" title="Список публикаций, цитирующих данную">11</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw42343461">
+<td align="center" valign="top" class="select-tr-left"><a name="x42343461"></a>
+<font color="#00008f"><b>28.</b></font><br><input type="checkbox" name="tid42343461" id="tid42343461" onclick="if (this.checked) {RowSelect(&quot;arw42343461&quot;,1)} else {RowSelect(&quot;arw42343461&quot;,0)}"><div id="pdf_42343461" name="pdf_42343461"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=42343461"><b><span style="line-height:1.0;">РЕДАКТОР ПРОГРАММНОГО КОДА НА ОСНОВЕ ГОЛОСОВОГО ИНТЕРФЕЙСА</span></b></a><br><font color="#00008f"><i>Омётов Н.П., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Информатика, моделирование, автоматизация проектирования.&nbsp;Сборник научных трудов XI Всероссийской школы-семинара аспирантов, студентов и молодых ученых, посвященной памяти Афанасьева Александра Николаевича. Под редакцией Н.Н. Войта. 2019.  С. 101-105.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw39161958">
+<td align="center" valign="top" class="select-tr-left"><a name="x39161958"></a>
+<font color="#00008f"><b>29.</b></font><br><input type="checkbox" name="tid39161958" id="tid39161958" onclick="if (this.checked) {RowSelect(&quot;arw39161958&quot;,1)} else {RowSelect(&quot;arw39161958&quot;,0)}"><div id="pdf_39161958" name="pdf_39161958"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=39161958"><b><span style="line-height:1.0;">АНАЛИЗ СИСТЕМЫ НАЗНАЧЕНИЯ ОТВЕТСТВЕННЫХ ИСПОЛНИТЕЛЕЙ НА ФОРМИРУЮЩИЕСЯ ПРОЕКТЫ РЕГИОНАЛЬНОГО УРОВНЯ И СИНТЕЗ ПРЕДЛОЖЕНИЙ ПО СОВЕРШЕНСТВОВАНИЮ ЕЕ ЭФФЕКТИВНОСТИ</span></b></a><br><font color="#00008f"><i>Горлова Е.А., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Электронное обучение в непрерывном образовании 2019.&nbsp;VI Международная научно-практическая конференция, посвященная памяти Александра Николаевича Афанасьева. Сборник научных трудов. 2019.  С. 12-19.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw42343473">
+<td align="center" valign="top" class="select-tr-left"><a name="x42343473"></a>
+<font color="#00008f"><b>30.</b></font><br><input type="checkbox" name="tid42343473" id="tid42343473" onclick="if (this.checked) {RowSelect(&quot;arw42343473&quot;,1)} else {RowSelect(&quot;arw42343473&quot;,0)}"><div id="pdf_42343473" name="pdf_42343473"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=42343473"><b><span style="line-height:1.0;">КОМБИНИРОВАНИЕ АЛГОРИТМОВ СЖАТИЯ ДАННЫХ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Болкунов В.А.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Информатика, моделирование, автоматизация проектирования.&nbsp;Сборник научных трудов XI Всероссийской школы-семинара аспирантов, студентов и молодых ученых, посвященной памяти Афанасьева Александра Николаевича. Под редакцией Н.Н. Войта. 2019.  С. 169-175.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw37305930">
+<td align="center" valign="top" class="select-tr-left"><a name="x37305930"></a>
+<font color="#00008f"><b>31.</b></font><br><input type="checkbox" name="tid37305930" id="tid37305930" onclick="if (this.checked) {RowSelect(&quot;arw37305930&quot;,1)} else {RowSelect(&quot;arw37305930&quot;,0)}"><div id="pdf_37305930" name="pdf_37305930"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=37305930"><b><span style="line-height:1.0;">ОЦЕНКА КАЧЕСТВА КОРПОРАТИВНЫХ САЙТОВ РОССИЙСКИХ АВИАКОМПАНИЙ НА ПЛАТФОРМЕ 1С БИТРИКС</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Сагитова Т.В.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Проблемы и перспективы экономических отношений предприятий авиационного кластера.&nbsp;III Всероссийская научная конференция. 2019.  С. 19-23.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw39161990">
+<td align="center" valign="top" class="select-tr-left"><a name="x39161990"></a>
+<font color="#00008f"><b>32.</b></font><br><input type="checkbox" name="tid39161990" id="tid39161990" onclick="if (this.checked) {RowSelect(&quot;arw39161990&quot;,1)} else {RowSelect(&quot;arw39161990&quot;,0)}"><div id="pdf_39161990" name="pdf_39161990"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=39161990"><b><span style="line-height:1.0;">РАСШИРЕНИЕ ВОЗМОЖНОСТЕЙ ПРИЛОЖЕНИЙ ДЛЯ ЧТЕНИЯ КНИГ В ТАЙМ-МЕНЕДЖМЕНТЕ</span></b></a><br><font color="#00008f"><i>Кудинов Д.П., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Электронное обучение в непрерывном образовании 2019.&nbsp;VI Международная научно-практическая конференция, посвященная памяти Александра Николаевича Афанасьева. Сборник научных трудов. 2019.  С. 227-231.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw39161993">
+<td align="center" valign="top" class="select-tr-left"><a name="x39161993"></a>
+<font color="#00008f"><b>33.</b></font><br><input type="checkbox" name="tid39161993" id="tid39161993" onclick="if (this.checked) {RowSelect(&quot;arw39161993&quot;,1)} else {RowSelect(&quot;arw39161993&quot;,0)}"><div id="pdf_39161993" name="pdf_39161993"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=39161993"><b><span style="line-height:1.0;">РАЗРАБОТКА ПРИЛОЖЕНИЯ, АВТОМАТИЗИРУЮЩЕГО РАСЧЁТ ЗАТРАТ ИТ-ПРОЕКТА</span></b></a><br><font color="#00008f"><i>Масленникова М.В., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Электронное обучение в непрерывном образовании 2019.&nbsp;VI Международная научно-практическая конференция, посвященная памяти Александра Николаевича Афанасьева. Сборник научных трудов. 2019.  С. 248-254.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=39161993" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw39161995">
+<td align="center" valign="top" class="select-tr-left"><a name="x39161995"></a>
+<font color="#00008f"><b>34.</b></font><br><input type="checkbox" name="tid39161995" id="tid39161995" onclick="if (this.checked) {RowSelect(&quot;arw39161995&quot;,1)} else {RowSelect(&quot;arw39161995&quot;,0)}"><div id="pdf_39161995" name="pdf_39161995"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=39161995"><b><span style="line-height:1.0;">РАЗРАБОТКА СИСТЕМЫ ОПРЕДЕЛЕНИЯ ВЕРОЯТНОСТИ УСПЕШНОСТИ ПРОЕКТА С ПРИМЕНЕНИЕМ СЕНТИМЕНТ-АНАЛИЗА ДЛЯ ОЦЕНКИ СФОРМИРОВАННОСТИ КОМАНДЫ И НЕЧЕТКИМ ВЫВОДОМ</span></b></a><br><font color="#00008f"><i>Смолькина Л.И., Фасхутдинова Д.А., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Электронное обучение в непрерывном образовании 2019.&nbsp;VI Международная научно-практическая конференция, посвященная памяти Александра Николаевича Афанасьева. Сборник научных трудов. 2019.  С. 260-270.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw41371395">
+<td align="center" valign="top" class="select-tr-left"><a name="x41371395"></a>
+<font color="#00008f"><b>35.</b></font><br><input type="checkbox" name="tid41371395" id="tid41371395" onclick="if (this.checked) {RowSelect(&quot;arw41371395&quot;,1)} else {RowSelect(&quot;arw41371395&quot;,0)}"><div id="pdf_41371395" name="pdf_41371395"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=41371395"><b><span style="line-height:1.0;">СОВРЕМЕННЫЕ ПРОБЛЕМЫ ПРОЕКТИРОВАНИЯ, ПРОИЗВОДСТВА И ЭКСПЛУАТАЦИИ РАДИОТЕХНИЧЕСКИХ СИСТЕМ</span></b></a><br>
+<font color="#00008f">
+
+Сборник научных трудов / 2019. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw41847496">
+<td align="center" valign="top" class="select-tr-left"><a name="x41847496"></a>
+<font color="#00008f"><b>36.</b></font><br><input type="checkbox" name="tid41847496" id="tid41847496" onclick="if (this.checked) {RowSelect(&quot;arw41847496&quot;,1)} else {RowSelect(&quot;arw41847496&quot;,0)}"><div id="pdf_41847496" name="pdf_41847496"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=41847496"><b><span style="line-height:1.0;">СТУДЕНТЫ ИТ-СПЕЦИАЛЬНОСТЕЙ О ДЕФИЦИТЕ ЗНАНИЙ В КОНТЕКСТЕ ОСВОЕНИЯ ПРОФЕССИИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Иванов Н.Д.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Проблемы социальной идентификации российской молодежи: содержательный и коммуникативный аспекты.&nbsp;Сборник научных трудов Всероссийской научно-практической конференции. 2019.  С. 310-315.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=41847496" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw46106724">
+<td align="center" valign="top" class="select-tr-left"><a name="x46106724"></a>
+<font color="#00008f"><b>37.</b></font><br><input type="checkbox" name="tid46106724" id="tid46106724" onclick="if (this.checked) {RowSelect(&quot;arw46106724&quot;,1)} else {RowSelect(&quot;arw46106724&quot;,0)}"><div id="pdf_46106724" name="pdf_46106724"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=46106724"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ ОТРАСЛИ ИНФОРМАЦИОННЫХ ТЕХНОЛОГИЙ НА ТЕРРИТОРИИ УЛЬЯНОВСКОЙ ОБЛАСТИ И РАЗРАБОТКА ИТ-СТРАТЕГИИ ДО 2030 ГОДА</span></b></a><br><font color="#00008f"><i>Ярушкина Н.Г., Афанасьева Т.В., Ахметшина Е.Р., Гараева С.Г., Елисеев С.В., Ефремов Д.А., Жмырева А.А., Костин В.Г., Морозов А.Ю., Полетаева О.В., Прозоров С.Л., Райкунова Е.С., Сафиуллин А.Р., Святов К.В., Скворцов С.В., Сухопаров Е.Н., Сухопарова Т.А., Тронин В.Г., Холкина К.Д., Шиняева О.В. и др.</i></font><br>
+<font color="#00008f">
+
+Коллективная монография /  Ульяновск, 2019. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=46106724" title="Список публикаций, цитирующих данную">2</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw39161967">
+<td align="center" valign="top" class="select-tr-left"><a name="x39161967"></a>
+<font color="#00008f"><b>38.</b></font><br><input type="checkbox" name="tid39161967" id="tid39161967" onclick="if (this.checked) {RowSelect(&quot;arw39161967&quot;,1)} else {RowSelect(&quot;arw39161967&quot;,0)}"><div id="pdf_39161967" name="pdf_39161967"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=39161967"><b><span style="line-height:1.0;">УПРАВЛЕНИЕ ПРОЕКТОМ АВТОМАТИЗАЦИИ ПРОГНОЗИРОВАНИЯ ЦЕН В РАМКАХ ПЛАТЕЖНОЙ СИСТЕМЫ АВИАКОМПАНИИ</span></b></a><br><font color="#00008f"><i>Платов П.В., Скрябина М.В., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Электронное обучение в непрерывном образовании 2019.&nbsp;VI Международная научно-практическая конференция, посвященная памяти Александра Николаевича Афанасьева. Сборник научных трудов. 2019.  С. 75-85.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw42343460">
+<td align="center" valign="top" class="select-tr-left"><a name="x42343460"></a>
+<font color="#00008f"><b>39.</b></font><br><input type="checkbox" name="tid42343460" id="tid42343460" onclick="if (this.checked) {RowSelect(&quot;arw42343460&quot;,1)} else {RowSelect(&quot;arw42343460&quot;,0)}"><div id="pdf_42343460" name="pdf_42343460"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=42343460"><b><span style="line-height:1.0;">ИССЛЕДОВАНИЕ ВОЗМОЖНОСТЕЙ WINAPI ПРИ СОЗДАНИИ ДВУМЕРНЫХ ИГР</span></b></a><br><font color="#00008f"><i>Николаев С.В., Демянчук А.Г., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Информатика, моделирование, автоматизация проектирования.&nbsp;Сборник научных трудов XI Всероссийской школы-семинара аспирантов, студентов и молодых ученых, посвященной памяти Афанасьева Александра Николаевича. Под редакцией Н.Н. Войта. 2019.  С. 94-100.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw46467353">
+<td align="center" valign="top" class="select-tr-left"><a name="x46467353"></a>
+<font color="#00008f"><b>40.</b></font><br><input type="checkbox" name="tid46467353" id="tid46467353" onclick="if (this.checked) {RowSelect(&quot;arw46467353&quot;,1)} else {RowSelect(&quot;arw46467353&quot;,0)}"><div id="pdf_46467353" name="pdf_46467353"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=46467353"><b><span style="line-height:1.0;">МОДЕЛИ ОТСМ - ТРИЗ - РТВ ДЛЯ РАЗВИТИЯ МЫШЛЕНИЯ И ВООБРАЖЕНИЯ</span></b></a><br><font color="#00008f"><i>Сидорчук Т.А., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ Ульяновск, 2019. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=46467353" title="Список публикаций, цитирующих данную">3</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw41612606">
+<td align="center" valign="top" class="select-tr-left"><a name="x41612606"></a>
+<font color="#00008f"><b>41.</b></font><br><input type="checkbox" name="tid41612606" id="tid41612606" onclick="if (this.checked) {RowSelect(&quot;arw41612606&quot;,1)} else {RowSelect(&quot;arw41612606&quot;,0)}"><div id="pdf_41612606" name="pdf_41612606"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=41612606"><b><span style="line-height:1.0;">SCENES SEGMENTATION IN SELF-DRIVING CAR NAVIGATION SYSTEM USING NEURAL NETWORK MODELS WITH ATTENTION</span></b></a><br><font color="#00008f"><i>Sviatov K., Miheev A., Kanin D., Tronin V., Sukhov S.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=41611922">Lecture Notes in Computer Science</a>. 
+2019. Т. 11623 LNCS.  С. 278-289.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=41612606" title="Список публикаций, цитирующих данную">4</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw41490054">
+<td align="center" valign="top" class="select-tr-left"><a name="x41490054"></a>
+<font color="#00008f"><b>42.</b></font><br><input type="checkbox" name="tid41490054" id="tid41490054" onclick="if (this.checked) {RowSelect(&quot;arw41490054&quot;,1)} else {RowSelect(&quot;arw41490054&quot;,0)}"><div id="pdf_41490054" name="pdf_41490054"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=41490054"><b><span style="line-height:1.0;">ОПЫТ ПРЕПОДАВАНИЯ ТРИЗ ШКОЛЬНИКАМ СТАРШИХ КЛАССОВ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Сидорчук Т.А.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=41490051">Вестник Ульяновского государственного технического университета</a>. 
+2019. <a href="/contents.asp?id=41490051&amp;selid=41490054">№&nbsp;3&nbsp;(87)</a>.  С. 13-17.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=41490054" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw37174084">
+<td align="center" valign="top" class="select-tr-left"><a name="x37174084"></a>
+<font color="#00008f"><b>43.</b></font><br><input type="checkbox" name="tid37174084" id="tid37174084" onclick="if (this.checked) {RowSelect(&quot;arw37174084&quot;,1)} else {RowSelect(&quot;arw37174084&quot;,0)}"><div id="pdf_37174084" name="pdf_37174084"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=37174084"><b><span style="line-height:1.0;">СЕГМЕНТАЦИЯ СЦЕН В ЗАДАЧАХ НАВИГАЦИИ АВТОНОМНОГО АВТОМОБИЛЯ С ИСПОЛЬЗОВАНИЕМ НЕЙРОСЕТЕВЫХ МОДЕЛЕЙ С ВНИМАНИЕМ</span></b></a><br><font color="#00008f"><i>Михеев А.В., Святов К.В., Канин Д.П., Сухов С.В., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=37174079">Автоматизация процессов управления</a>. 
+2019. <a href="/contents.asp?id=37174079&amp;selid=37174084">№&nbsp;1&nbsp;(55)</a>.  С. 39-47.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=37174084" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw41145246">
+<td align="center" valign="top" class="select-tr-left"><a name="x41145246"></a>
+<font color="#00008f"><b>44.</b></font><br><input type="checkbox" name="tid41145246" id="tid41145246" onclick="if (this.checked) {RowSelect(&quot;arw41145246&quot;,1)} else {RowSelect(&quot;arw41145246&quot;,0)}"><div id="pdf_41145246" name="pdf_41145246"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=41145246"><b><span style="line-height:1.0;">ПОДХОД К ОЦЕНКЕ ТРУДОЕМКОСТИ ЗАДАЧ В ПРОЦЕССЕ РАЗРАБОТКИ ПРОГРАММНОГО ОБЕСПЕЧЕНИЯ НА ОСНОВЕ НЕЙРОННЫХ СЕТЕЙ</span></b></a><br><font color="#00008f"><i>Дударин П.В., Тронин В.Г., Святов К.В., Белов В.А., Шакуров Р.А.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=41145238">Автоматизация процессов управления</a>. 
+2019. <a href="/contents.asp?id=41145238&amp;selid=41145246">№&nbsp;3&nbsp;(57)</a>.  С. 65-72.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=41145246" title="Список публикаций, цитирующих данную">8</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw43212145">
+<td align="center" valign="top" class="select-tr-left"><a name="x43212145"></a>
+<font color="#00008f"><b>45.</b></font><br><input type="checkbox" name="tid43212145" id="tid43212145" onclick="if (this.checked) {RowSelect(&quot;arw43212145&quot;,1)} else {RowSelect(&quot;arw43212145&quot;,0)}"><div id="pdf_43212145" name="pdf_43212145"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=43212145"><b><span style="line-height:1.0;">A TECHNIQUE TO PRE-TRAINED NEURAL NETWORK LANGUAGE MODEL CUSTOMIZATION TO SOFTWARE DEVELOPMENT DOMAIN</span></b></a><br><font color="#00008f"><i>Dudarin P.V., Tronin V.G., Svyatov K.V.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=43086721">Communications in Computer and Information Science</a>. 
+2019. Т. 1093.  С. 169-176.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=43212145" title="Список публикаций, цитирующих данную">3</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw43244087">
+<td align="center" valign="top" class="select-tr-left"><a name="x43244087"></a>
+<font color="#00008f"><b>46.</b></font><br><input type="checkbox" name="tid43244087" id="tid43244087" onclick="if (this.checked) {RowSelect(&quot;arw43244087&quot;,1)} else {RowSelect(&quot;arw43244087&quot;,0)}"><div id="pdf_43244087" name="pdf_43244087"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=43244087"><b><span style="line-height:1.0;">AN APPROACH TO CUSTOMIZATION OF PRE-TRAINED NEURAL NETWORK LANGUAGE MODEL TO SPECIFIC DOMAIN</span></b></a><br><font color="#00008f"><i>Dudarin P.V., Tronin V.G., Svyatov K.V.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Компьютерная лингвистика и интеллектуальные технологии.&nbsp;по материалам ежегодной Международной конференции "Диалог" (2019). Москва, 2019.  С. 194-202.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=43244087" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+
+<tr valign="middle" id="brw837536575">
+<td align="center" valign="top" class="select-tr-left"><a name="y837536575"></a><font color="#00008f"><b>47.</b></font><br><input type="checkbox" name="pid837536575" id="pid837536575" onclick="if (this.checked) {RowSelect(&quot;brw837536575&quot;,1)} else {RowSelect(&quot;brw837536575&quot;,0)}"><br><img src="/images/ref.gif" width="16" height="14" hspace="3" vspace="3" border="0" title="Публикация из списков цитируемой литературы">
+
+</td>
+<td align="left" valign="top"><b>
+
+<font color="#00008f">КОМБИНИРОВАНИЕ АЛГОРИТМОВ СЖАТИЯ ДАННЫХ</font></b><br><font color="#00008f"><i>
+Тронин В.Г., Болкунов В.А.</i></font><br>
+
+<font color="#00008f">2019. </font>
+
+</td>
+<td align="center" valign="middle" class="select-tr-right"><a href="cit_items.asp?publid=837536575" title="Список публикаций, цитирующих данную">1</a></td></tr>
+
+<tr valign="middle" id="arw50722899">
+<td align="center" valign="top" class="select-tr-left"><a name="x50722899"></a>
+<font color="#00008f"><b>48.</b></font><br><input type="checkbox" name="tid50722899" id="tid50722899" onclick="if (this.checked) {RowSelect(&quot;arw50722899&quot;,1)} else {RowSelect(&quot;arw50722899&quot;,0)}"><div id="pdf_50722899" name="pdf_50722899"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=50722899"><b><span style="line-height:1.0;">ТЕХНОЛОГИЯ И ИНСТРУМЕНТАРИЙ УПРАВЛЕНИЯ РИСКАМИ И УСПЕШНОСТЬЮ РАЗРАБОТОК СИСТЕМ, ИНТЕНСИВНО ИСПОЛЬЗУЮЩИХ ПРОГРАММНОЕ ОБЕСПЕЧЕНИЕ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+
+
+НИР: грант&nbsp;№&nbsp;18-47-732005. Российский фонд фундаментальных исследований. 2018.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw37640646">
+<td align="center" valign="top" class="select-tr-left"><a name="x37640646"></a>
+<font color="#00008f"><b>49.</b></font><br><input type="checkbox" name="tid37640646" id="tid37640646" onclick="if (this.checked) {RowSelect(&quot;arw37640646&quot;,1)} else {RowSelect(&quot;arw37640646&quot;,0)}"><div id="pdf_37640646" name="pdf_37640646"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=37640646"><b><span style="line-height:1.0;">СРАВНИТЕЛЬНЫЙ АНАЛИЗ САЙТОВ ВУЗОВ УЛЬЯНОВСКОЙ ОБЛАСТИ НА ЮЗАБИЛИТИ, МОБИЛЬНОСТЬ И ВЕБОМЕТРИКС</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Гаврилов В.Н.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Информатика и вычислительная техника.&nbsp;Сборник научных трудов X Всероссийской научно-технической конференции аспирантов, студентов и молодых ученых. Под общей редакцией В.Н. Негоды. 2018.  С. 148-152.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=37640646" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw41707151">
+<td align="center" valign="top" class="select-tr-left"><a name="x41707151"></a>
+<font color="#00008f"><b>50.</b></font><br><input type="checkbox" name="tid41707151" id="tid41707151" onclick="if (this.checked) {RowSelect(&quot;arw41707151&quot;,1)} else {RowSelect(&quot;arw41707151&quot;,0)}"><div id="pdf_41707151" name="pdf_41707151"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=41707151"><b><span style="line-height:1.0;">ПРИНЦИП РАБОТЫ CHATBOT (ВИРТУАЛЬНОГО СОБЕСЕДНИКА) НА БАЗЕ РЕКУРРЕНТНОЙ НЕЙРОННОЙ СЕТИ И ЕГО ПРИМЕНЕНИЕ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Черноморченко А.В., Жарков А.А.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Информатика, моделирование, автоматизация проектирования.&nbsp;Сборник научных трудов X Всероссийской школы-семинара аспирантов, студентов и молодых ученых. Под редакцией А.Н. Афанасьева. 2018.  С. 190-197.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw35383271">
+<td align="center" valign="top" class="select-tr-left"><a name="x35383271"></a>
+<font color="#00008f"><b>51.</b></font><br><input type="checkbox" name="tid35383271" id="tid35383271" onclick="if (this.checked) {RowSelect(&quot;arw35383271&quot;,1)} else {RowSelect(&quot;arw35383271&quot;,0)}"><div id="pdf_35383271" name="pdf_35383271"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=35383271"><b><span style="line-height:1.0;">СРАВНИТЕЛЬНЫЙ АНАЛИЗ САЙТОВ ЭЛЕКТРОННЫХ НАУЧНЫХ БИБЛИОТЕК CYBERLENINKA И ELIBRARY.RU</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Гаврилов В.Н.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Электронное обучение в непрерывном образовании 2018.&nbsp;V Международная научно-практическая конференция. 2018.  С. 67-74.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw35383272">
+<td align="center" valign="top" class="select-tr-left"><a name="x35383272"></a>
+<font color="#00008f"><b>52.</b></font><br><input type="checkbox" name="tid35383272" id="tid35383272" onclick="if (this.checked) {RowSelect(&quot;arw35383272&quot;,1)} else {RowSelect(&quot;arw35383272&quot;,0)}"><div id="pdf_35383272" name="pdf_35383272"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=35383272"><b><span style="line-height:1.0;">АНАЛИЗ ДОСТУПНОСТИ ПУБЛИКАЦИЙ ЖУРНАЛОВ ЧЕРЕЗ НАУЧНЫЕ ЭЛЕКТРОННЫЕ БИБЛИОТЕКИ CYBERLENINKA И ELIBRARY</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Электронное обучение в непрерывном образовании 2018.&nbsp;V Международная научно-практическая конференция. 2018.  С. 75-87.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=35383272" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw41707133">
+<td align="center" valign="top" class="select-tr-left"><a name="x41707133"></a>
+<font color="#00008f"><b>53.</b></font><br><input type="checkbox" name="tid41707133" id="tid41707133" onclick="if (this.checked) {RowSelect(&quot;arw41707133&quot;,1)} else {RowSelect(&quot;arw41707133&quot;,0)}"><div id="pdf_41707133" name="pdf_41707133"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=41707133"><b><span style="line-height:1.0;">АНАЛИЗ ИЗМЕНЕНИЯ СТЕПЕНИ ИДЕАЛЬНОСТИ КОНЕЧНОГО РЕЗУЛЬТАТА В РАЗРАБОТКЕ ПРОГРАММНОГО ПРОДУКТА</span></b></a><br><font color="#00008f"><i>Козлов О.А., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Информатика, моделирование, автоматизация проектирования.&nbsp;Сборник научных трудов X Всероссийской школы-семинара аспирантов, студентов и молодых ученых. Под редакцией А.Н. Афанасьева. 2018.  С. 97-102.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw35627674">
+<td align="center" valign="top" class="select-tr-left"><a name="x35627674"></a>
+<font color="#00008f"><b>54.</b></font><br><input type="checkbox" name="tid35627674" id="tid35627674" onclick="if (this.checked) {RowSelect(&quot;arw35627674&quot;,1)} else {RowSelect(&quot;arw35627674&quot;,0)}"><div id="pdf_35627674" name="pdf_35627674"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=35627674"><b><span style="line-height:1.0;">СТАТИСТИЧЕСКИЕ МЕТОДЫ АНАЛИЗА НЕКОТОРЫХ ПОКАЗАТЕЛЕЙ ПУБЛИКАЦИОННОЙ АКТИВНОСТИ</span></b></a><br><font color="#00008f"><i>Фролова Ю.Д., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладная математика и информатика: современные исследования в области естественных и технических наук.&nbsp;Материалы IV научно-практической международной конференции (школы-семинара) молодых ученых: в 2 частях. 2018.  С. 275-281.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=35627674" title="Список публикаций, цитирующих данную">2</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw32786352">
+<td align="center" valign="top" class="select-tr-left"><a name="x32786352"></a>
+<font color="#00008f"><b>55.</b></font><br><input type="checkbox" name="tid32786352" id="tid32786352" onclick="if (this.checked) {RowSelect(&quot;arw32786352&quot;,1)} else {RowSelect(&quot;arw32786352&quot;,0)}"><div id="pdf_32786352" name="pdf_32786352"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=32786352"><b><span style="line-height:1.0;">ЭФФЕКТИВНОСТЬ МОДЕЛИ ОТКРЫТОГО ДОСТУПА К ПУБЛИКАЦИЯМ НА ПРИМЕРЕ СРАВНЕНИЯ НАУЧНЫХ ЭЛЕКТРОННЫХ БИБЛИОТЕК РГБ И "КИБЕРЛЕНИНКА"</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Карсукова Д.В.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34842681">Вестник Ульяновского государственного технического университета</a>. 
+2018. <a href="/contents.asp?id=34842681&amp;selid=32786352">№&nbsp;1&nbsp;(81)</a>.  С. 32-38.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=32786352" title="Список публикаций, цитирующих данную">12</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw36463133">
+<td align="center" valign="top" class="select-tr-left"><a name="x36463133"></a>
+<font color="#00008f"><b>56.</b></font><br><input type="checkbox" name="tid36463133" id="tid36463133" onclick="if (this.checked) {RowSelect(&quot;arw36463133&quot;,1)} else {RowSelect(&quot;arw36463133&quot;,0)}"><div id="pdf_36463133" name="pdf_36463133"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=36463133"><b><span style="line-height:1.0;">АВТОМАТИЗАЦИЯ ПРОЦЕССА ИЗВЛЕЧЕНИЯ СТРАНИЦ ИЗ PDF-ДОКУМЕНТА</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Куранов А.О.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=36463127">Вестник Ульяновского государственного технического университета</a>. 
+2018. <a href="/contents.asp?id=36463127&amp;selid=36463133">№&nbsp;3&nbsp;(83)</a>.  С. 31-38.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=36463133" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+
+<tr valign="middle" id="brw670775069">
+<td align="center" valign="top" class="select-tr-left"><a name="y670775069"></a><font color="#00008f"><b>57.</b></font><br><input type="checkbox" name="pid670775069" id="pid670775069" onclick="if (this.checked) {RowSelect(&quot;brw670775069&quot;,1)} else {RowSelect(&quot;brw670775069&quot;,0)}"><br><img src="/images/ref.gif" width="16" height="14" hspace="3" vspace="3" border="0" title="Публикация из списков цитируемой литературы">
+
+</td>
+<td align="left" valign="top"><b>
+
+<font color="#00008f">ТРИЗ В ИНЖЕНЕРНОМ ОБРАЗОВАНИИ</font></b><br><font color="#00008f"><i>
+Тронин В.Г.</i></font><br>
+
+<font color="#00008f"><a href="contents.asp?titleid=67665">SMART-образование Ульяновской области</a>. 
+2018. 
+№ 1(3). С. 134.
+</font></td>
+<td align="center" valign="middle" class="select-tr-right"><a href="cit_items.asp?publid=670775069" title="Список публикаций, цитирующих данную">3</a></td></tr>
+
+<tr valign="middle" id="arw29951583">
+<td align="center" valign="top" class="select-tr-left"><a name="x29951583"></a>
+<font color="#00008f"><b>58.</b></font><br><input type="checkbox" name="tid29951583" id="tid29951583" onclick="if (this.checked) {RowSelect(&quot;arw29951583&quot;,1)} else {RowSelect(&quot;arw29951583&quot;,0)}"><div id="pdf_29951583" name="pdf_29951583"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=29951583"><b><span style="line-height:1.0;">ПЛАНИРОВАНИЕ И УПРАВЛЕНИЕ НАУЧНЫМИ ПРОЕКТАМИ С ПРИМЕНЕНИЕМ СОВРЕМЕННЫХ ИНФОРМАЦИОННО-КОММУНИКАЦИОННЫХ ТЕХНОЛОГИЙ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ Ульяновск, 2017. 
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=29951583" title="Список публикаций, цитирующих данную">2</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw29789155">
+<td align="center" valign="top" class="select-tr-left"><a name="x29789155"></a>
+<font color="#00008f"><b>59.</b></font><br><input type="checkbox" name="tid29789155" id="tid29789155" onclick="if (this.checked) {RowSelect(&quot;arw29789155&quot;,1)} else {RowSelect(&quot;arw29789155&quot;,0)}"><div id="pdf_29789155" name="pdf_29789155"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=29789155"><b><span style="line-height:1.0;">ГИБКИЕ МЕТОДОЛОГИИ УПРАВЛЕНИЯ ПРОЕКТАМИ ПРИ ОБУЧЕНИИ СТУДЕНТОВ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Козлова Д.С.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: ПАТРИОТИЗМ КАК ОБЪЕДИНЯЮЩАЯ НАЦИОНАЛЬНАЯ ИДЕЯ.&nbsp;столетию Великой российской революции (от свержения самодержавия к образованию СССР) посвящается : сборник научных трудов Международной научно-практической конференции. 2017.  С. 152-157.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=29789155" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw30077956">
+<td align="center" valign="top" class="select-tr-left"><a name="x30077956"></a>
+<font color="#00008f"><b>60.</b></font><br><input type="checkbox" name="tid30077956" id="tid30077956" onclick="if (this.checked) {RowSelect(&quot;arw30077956&quot;,1)} else {RowSelect(&quot;arw30077956&quot;,0)}"><div id="pdf_30077956" name="pdf_30077956"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=30077956"><b><span style="line-height:1.0;">АНАЛИЗ ПУБЛИКАЦИЙ АВТОРОВ УЛГТУ ПО ДАННЫМ ЭЛЕКТРОННОЙ НАУЧНОЙ БИБЛИОТЕКИ НА ОСНОВЕ НЕЧЕТКОЙ КЛАСТЕРИЗАЦИИ ДАННЫХ</span></b></a><br><font color="#00008f"><i>Микина К.С., Святкина Ю.А., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Нечеткие системы и мягкие вычисления. Промышленные применения.&nbsp;Сборник научных трудов IV Всероссийской научно-практической мультиконференции с международным участием "Прикладные информационные системы (ПИС-2017)". Ответственная за выпуск И. А. Тимина. 2017.  С. 153-160.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=30077956" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw28821872">
+<td align="center" valign="top" class="select-tr-left"><a name="x28821872"></a>
+<font color="#00008f"><b>61.</b></font><br><input type="checkbox" name="tid28821872" id="tid28821872" onclick="if (this.checked) {RowSelect(&quot;arw28821872&quot;,1)} else {RowSelect(&quot;arw28821872&quot;,0)}"><div id="pdf_28821872" name="pdf_28821872"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=28821872"><b><span style="line-height:1.0;">АВТОМАТИЗАЦИЯ РАСЧЁТА РЕЙТИНГА НАУЧНОЙ АКТИВНОСТИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Скворцов С.В.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34465690">Вестник Ульяновского государственного технического университета</a>. 
+2017. <a href="/contents.asp?id=34465690&amp;selid=28821872">№&nbsp;1&nbsp;(77)</a>.  С. 55-60.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=28821872" title="Список публикаций, цитирующих данную">9</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw29800705">
+<td align="center" valign="top" class="select-tr-left"><a name="x29800705"></a>
+<font color="#00008f"><b>62.</b></font><br><input type="checkbox" name="tid29800705" id="tid29800705" onclick="if (this.checked) {RowSelect(&quot;arw29800705&quot;,1)} else {RowSelect(&quot;arw29800705&quot;,0)}"><div id="pdf_29800705" name="pdf_29800705"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=29800705"><b><span style="line-height:1.0;">АНАЛИЗ КАЧЕСТВА УПРАВЛЕНИЯ КОСМИЧЕСКИМИ ПРОЕКТАМИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Юхно И.В.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34527832">Вестник Ульяновского государственного технического университета</a>. 
+2017. <a href="/contents.asp?id=34527832&amp;selid=29800705">№&nbsp;2&nbsp;(78)</a>.  С. 71-77.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=29800705" title="Список публикаций, цитирующих данную">4</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw30382937">
+<td align="center" valign="top" class="select-tr-left"><a name="x30382937"></a>
+<font color="#00008f"><b>63.</b></font><br><input type="checkbox" name="tid30382937" id="tid30382937" onclick="if (this.checked) {RowSelect(&quot;arw30382937&quot;,1)} else {RowSelect(&quot;arw30382937&quot;,0)}"><div id="pdf_30382937" name="pdf_30382937"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=30382937"><b><span style="line-height:1.0;">ПРОЕКТИРОВАНИЕ ОНТОЛОГИИ НАУКОМЕТРИЧЕСКИХ ТЕРМИНОВ С УЧЁТОМ ЭВОЛЮЦИИ НАУКОМЕТРИЧЕСКИХ БАЗ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Фирулина М.М.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34541856">Вестник Ульяновского государственного технического университета</a>. 
+2017. <a href="/contents.asp?id=34541856&amp;selid=30382937">№&nbsp;3&nbsp;(79)</a>.  С. 33-41.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=30382937" title="Список публикаций, цитирующих данную">3</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw29120660">
+<td align="center" valign="top" class="select-tr-left"><a name="x29120660"></a>
+<font color="#00008f"><b>64.</b></font><br><input type="checkbox" name="tid29120660" id="tid29120660" onclick="if (this.checked) {RowSelect(&quot;arw29120660&quot;,1)} else {RowSelect(&quot;arw29120660&quot;,0)}"><div id="pdf_29120660" name="pdf_29120660"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=29120660"><b><span style="line-height:1.0;">МОНИТОРИНГ ПУБЛИКАЦИОННОЙ АКТИВНОСТИ УЧАЩИХСЯ УЛГТУ ПО ДАННЫМ РИНЦ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Горлова Е.А., Эрдман Р.А.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34477083">Электронное обучение в непрерывном образовании</a>. 
+2017. <a href="/contents.asp?id=34477083&amp;selid=29120660">№&nbsp;1</a>.  С. 147-154.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw29120661">
+<td align="center" valign="top" class="select-tr-left"><a name="x29120661"></a>
+<font color="#00008f"><b>65.</b></font><br><input type="checkbox" name="tid29120661" id="tid29120661" onclick="if (this.checked) {RowSelect(&quot;arw29120661&quot;,1)} else {RowSelect(&quot;arw29120661&quot;,0)}"><div id="pdf_29120661" name="pdf_29120661"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=29120661"><b><span style="line-height:1.0;">ИСПОЛЬЗОВАНИЕ ОНТОЛОГИЙ ДЛЯ ОРГАНИЗАЦИОННОГО УПРАВЛЕНИЯ ПРОГРАММНЫМИ ПРОЕКТАМИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Михайлова Е.С.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34477083">Электронное обучение в непрерывном образовании</a>. 
+2017. <a href="/contents.asp?id=34477083&amp;selid=29120661">№&nbsp;1</a>.  С. 155-159.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw29120662">
+<td align="center" valign="top" class="select-tr-left"><a name="x29120662"></a>
+<font color="#00008f"><b>66.</b></font><br><input type="checkbox" name="tid29120662" id="tid29120662" onclick="if (this.checked) {RowSelect(&quot;arw29120662&quot;,1)} else {RowSelect(&quot;arw29120662&quot;,0)}"><div id="pdf_29120662" name="pdf_29120662"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=29120662"><b><span style="line-height:1.0;">ЭВОЛЮЦИЯ НАУКОМЕТРИЧЕСКОЙ ОНТОЛОГИИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Фирулина М.М.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34477083">Электронное обучение в непрерывном образовании</a>. 
+2017. <a href="/contents.asp?id=34477083&amp;selid=29120662">№&nbsp;1</a>.  С. 160-166.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw29120663">
+<td align="center" valign="top" class="select-tr-left"><a name="x29120663"></a>
+<font color="#00008f"><b>67.</b></font><br><input type="checkbox" name="tid29120663" id="tid29120663" onclick="if (this.checked) {RowSelect(&quot;arw29120663&quot;,1)} else {RowSelect(&quot;arw29120663&quot;,0)}"><div id="pdf_29120663" name="pdf_29120663"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=29120663"><b><span style="line-height:1.0;">ПРОЕКТИРОВАНИЕ ПРОФИЛЯ ИССЛЕДОВАТЕЛЯ ПО ИНТЕРНЕТ-ИСТОЧНИКАМ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34477083">Электронное обучение в непрерывном образовании</a>. 
+2017. <a href="/contents.asp?id=34477083&amp;selid=29120663">№&nbsp;1</a>.  С. 167-173.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw28100482">
+<td align="center" valign="top" class="select-tr-left"><a name="x28100482"></a>
+<font color="#00008f"><b>68.</b></font><br><input type="checkbox" name="tid28100482" id="tid28100482" onclick="if (this.checked) {RowSelect(&quot;arw28100482&quot;,1)} else {RowSelect(&quot;arw28100482&quot;,0)}"><div id="pdf_28100482" name="pdf_28100482"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=28100482"><b><span style="line-height:1.0;">НАУКОМЕТРИЧЕСКИЕ ПОКАЗАТЕЛИ И ЭЛЕКТРОННОЕ НАСЛЕДИЕ АВТОРА ВАЛЕЕВА СУЛТАНА ГАЛИМЗЯНОВИЧА</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: IN MEMORIAM: СУЛТАН ГАЛИМЗЯНОВИЧ ВАЛЕЕВ.&nbsp;сборник памяти С. Г. Валеева. Ульяновск, 2016.  С. 115-128.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=28100482" title="Список публикаций, цитирующих данную">2</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw26542751">
+<td align="center" valign="top" class="select-tr-left"><a name="x26542751"></a>
+<font color="#00008f"><b>69.</b></font><br><input type="checkbox" name="tid26542751" id="tid26542751" onclick="if (this.checked) {RowSelect(&quot;arw26542751&quot;,1)} else {RowSelect(&quot;arw26542751&quot;,0)}"><div id="pdf_26542751" name="pdf_26542751"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=26542751"><b><span style="line-height:1.0;">КАЧЕСТВО ОБРАЗОВАНИЯ КАК НАЦИОНАЛЬНОЕ ДОСТОЯНИЕ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: ПАТРИОТИЗМ КАК ОБЪЕДИНЯЮЩАЯ НАЦИОНАЛЬНАЯ ИДЕЯ.&nbsp;Международная научно-практическая конференция, посвященная 250-летию со дня рождения Н.М. Карамзина: Сборник научных трудов. 2016.  С. 174-180.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=26542751" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw27499201">
+<td align="center" valign="top" class="select-tr-left"><a name="x27499201"></a>
+<font color="#00008f"><b>70.</b></font><br><input type="checkbox" name="tid27499201" id="tid27499201" onclick="if (this.checked) {RowSelect(&quot;arw27499201&quot;,1)} else {RowSelect(&quot;arw27499201&quot;,0)}"><div id="pdf_27499201" name="pdf_27499201"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=27499201"><b><span style="line-height:1.0;">ЗАПЛАНИРОВАННОЕ УСТАРЕВАНИЕ НАУЧНЫХ ИССЛЕДОВАНИЙ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Современные направления развития маркетинга и менеджмента.&nbsp;Сборник научных трудов. 2016.  С. 223-228.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=27499201" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw30118183">
+<td align="center" valign="top" class="select-tr-left"><a name="x30118183"></a>
+<font color="#00008f"><b>71.</b></font><br><input type="checkbox" name="tid30118183" id="tid30118183" onclick="if (this.checked) {RowSelect(&quot;arw30118183&quot;,1)} else {RowSelect(&quot;arw30118183&quot;,0)}"><div id="pdf_30118183" name="pdf_30118183"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=30118183"><b><span style="line-height:1.0;">ИНФОРМАЦИОННАЯ ПОДДЕРЖКА НАУЧНОЙ ДЕЯТЕЛЬНОСТИ ВНУТРИ ВУЗА</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: ИНФОРМАТИКА, МОДЕЛИРОВАНИЕ, АВТОМАТИЗАЦИЯ ПРОЕКТИРОВАНИЯ.&nbsp;VIII Всероссийская школа-семинар аспирантов, студентов и молодых ученых (ИМАП-2016). 2016.  С. 29-34.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw26209337">
+<td align="center" valign="top" class="select-tr-left"><a name="x26209337"></a>
+<font color="#00008f"><b>72.</b></font><br><input type="checkbox" name="tid26209337" id="tid26209337" onclick="if (this.checked) {RowSelect(&quot;arw26209337&quot;,1)} else {RowSelect(&quot;arw26209337&quot;,0)}"><div id="pdf_26209337" name="pdf_26209337"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=26209337"><b><span style="line-height:1.0;">ИСТОЧНИКИ ДАННЫХ ДЛЯ СИСТЕМЫ ПОДДЕРЖКИ ЖСТЛ ПО ТЕМАТИКЕ ИНФОРМАЦИОННЫХ ТЕХНОЛОГИЙ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Вузовская наука в современных условиях.&nbsp;Сборник материалов 50-й научно-технической конференции. В 3-х частях. 2016.  С. 192-194.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw26682091">
+<td align="center" valign="top" class="select-tr-left"><a name="x26682091"></a>
+<font color="#00008f"><b>73.</b></font><br><input type="checkbox" name="tid26682091" id="tid26682091" onclick="if (this.checked) {RowSelect(&quot;arw26682091&quot;,1)} else {RowSelect(&quot;arw26682091&quot;,0)}"><div id="pdf_26682091" name="pdf_26682091"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=26682091"><b><span style="line-height:1.0;">ИСТОЧНИКИ ДАННЫХ ДЛЯ РАЗРАБОТКИ СИСТЕМЫ ПОДДЕРЖКИ ТРИЗ НА ОСНОВЕ ОНТОЛОГИЙ</span></b></a><br><font color="#00008f"><i>Гришин М.В., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34264077">Известия Самарского научного центра Российской академии наук</a>. 
+2016. Т. 18. <a href="/contents.asp?id=34264077&amp;selid=26682091">№&nbsp;1-2</a>.  С. 386-389.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=26682091" title="Список публикаций, цитирующих данную">3</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw26275059">
+<td align="center" valign="top" class="select-tr-left"><a name="x26275059"></a>
+<font color="#00008f"><b>74.</b></font><br><input type="checkbox" name="tid26275059" id="tid26275059" onclick="if (this.checked) {RowSelect(&quot;arw26275059&quot;,1)} else {RowSelect(&quot;arw26275059&quot;,0)}"><div id="pdf_26275059" name="pdf_26275059"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=26275059"><b><span style="line-height:1.0;">ИСПОЛЬЗОВАНИЕ ПРИНЦИПОВ ГИБКИХ МЕТОДОЛОГИЙ УПРАВЛЕНИЯ ПРОЕКТАМИ ПРИ РАЗРАБОТКЕ РЕГИОНАЛЬНОЙ СИСТЕМЫ ЖКХ УЛЬЯНОВСКОЙ ОБЛАСТИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Моисеев В.В., Храмков Е.М.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34247627">Вестник Ульяновского государственного технического университета</a>. 
+2016. <a href="/contents.asp?id=34247627&amp;selid=26275059">№&nbsp;2&nbsp;(74)</a>.  С. 38-42.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=26275059" title="Список публикаций, цитирующих данную">4</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw26275051">
+<td align="center" valign="top" class="select-tr-left"><a name="x26275051"></a>
+<font color="#00008f"><b>75.</b></font><br><input type="checkbox" name="tid26275051" id="tid26275051" onclick="if (this.checked) {RowSelect(&quot;arw26275051&quot;,1)} else {RowSelect(&quot;arw26275051&quot;,0)}"><div id="pdf_26275051" name="pdf_26275051"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=26275051"><b><span style="line-height:1.0;">НЕОФИЦИАЛЬНЫЕ ИНТЕРНЕТ-РЕЙТИНГИ УНИВЕРСИТЕТОВ И СОЦИАЛЬНАЯ СЕТЬ "ВКОНТАКТЕ"</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Степанова О.П.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34247627">Вестник Ульяновского государственного технического университета</a>. 
+2016. <a href="/contents.asp?id=34247627&amp;selid=26275051">№&nbsp;2&nbsp;(74)</a>.  С. 4-9.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=26275051" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw27210595">
+<td align="center" valign="top" class="select-tr-left"><a name="x27210595"></a>
+<font color="#00008f"><b>76.</b></font><br><input type="checkbox" name="tid27210595" id="tid27210595" onclick="if (this.checked) {RowSelect(&quot;arw27210595&quot;,1)} else {RowSelect(&quot;arw27210595&quot;,0)}"><div id="pdf_27210595" name="pdf_27210595"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=27210595"><b><span style="line-height:1.0;">ВОЗМОЖНОСТИ ПРИМЕНЕНИЯ ГИБКИХ МЕТОДОЛОГИЙ УПРАВЛЕНИЯ ПРОЕКТАМИ ПРИ ОБУЧЕНИИ В ВУЗЕ ПО ТЕХНИЧЕСКИМ СПЕЦИАЛЬНОСТЯМ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34329182">Вестник Ульяновского государственного технического университета</a>. 
+2016. <a href="/contents.asp?id=34329182&amp;selid=27210595">№&nbsp;3&nbsp;(75)</a>.  С. 4-6.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=27210595" title="Список публикаций, цитирующих данную">23</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw28092767">
+<td align="center" valign="top" class="select-tr-left"><a name="x28092767"></a>
+<font color="#00008f"><b>77.</b></font><br><input type="checkbox" name="tid28092767" id="tid28092767" onclick="if (this.checked) {RowSelect(&quot;arw28092767&quot;,1)} else {RowSelect(&quot;arw28092767&quot;,0)}"><div id="pdf_28092767" name="pdf_28092767"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=28092767"><b><span style="line-height:1.0;">ОСОБЕННОСТИ ПРОВЕРКИ НА НАЛИЧИЕ ПЛАГИАТА РАЗЛИЧНЫХ ТИПОВ ПУБЛИКАЦИЙ В ВУЗЕ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34398381">Вестник Ульяновского государственного технического университета</a>. 
+2016. <a href="/contents.asp?id=34398381&amp;selid=28092767">№&nbsp;4&nbsp;(76)</a>.  С. 9-12.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=28092767" title="Список публикаций, цитирующих данную">8</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw26693452">
+<td align="center" valign="top" class="select-tr-left"><a name="x26693452"></a>
+<font color="#00008f"><b>78.</b></font><br><input type="checkbox" name="tid26693452" id="tid26693452" onclick="if (this.checked) {RowSelect(&quot;arw26693452&quot;,1)} else {RowSelect(&quot;arw26693452&quot;,0)}"><div id="pdf_26693452" name="pdf_26693452"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=26693452"><b><span style="line-height:1.0;">ОДНОКРИТЕРИАЛЬНАЯ ОПТИМИЗАЦИЯ РАСПИСАНИЯ РАБОТЫ ЭКИПАЖА НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ ПОДВОДНОЙ ЛОДКИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Аввакумова В.С., Шеянова И.Н.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34264684">Автоматизация процессов управления</a>. 
+2016. <a href="/contents.asp?id=34264684&amp;selid=26693452">№&nbsp;3&nbsp;(45)</a>.  С. 95-103.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=26693452" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw26095221">
+<td align="center" valign="top" class="select-tr-left"><a name="x26095221"></a>
+<font color="#00008f"><b>79.</b></font><br><input type="checkbox" name="tid26095221" id="tid26095221" onclick="if (this.checked) {RowSelect(&quot;arw26095221&quot;,1)} else {RowSelect(&quot;arw26095221&quot;,0)}"><div id="pdf_26095221" name="pdf_26095221"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=26095221"><b><span style="line-height:1.0;">СРАВНИТЕЛЬНЫЙ АНАЛИЗ ИНТЕРНЕТ-КОМПАНИЙ ТОП-10 В МИРЕ В 2014 ГОДУ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Сабитова Г.Р.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34240336">Экономика и управление в XXI веке: тенденции развития</a>. 
+2016. <a href="/contents.asp?id=34240336&amp;selid=26095221">№&nbsp;28-1</a>.  С. 82-87.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw26111596">
+<td align="center" valign="top" class="select-tr-left"><a name="x26111596"></a>
+<font color="#00008f"><b>80.</b></font><br><input type="checkbox" name="tid26111596" id="tid26111596" onclick="if (this.checked) {RowSelect(&quot;arw26111596&quot;,1)} else {RowSelect(&quot;arw26111596&quot;,0)}"><div id="pdf_26111596" name="pdf_26111596"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=26111596"><b><span style="line-height:1.0;">СОВРЕМЕННЫЕ ВОЗМОЖНОСТИ ПРЕДСТАВЛЕНИЯ НАУЧНЫХ МЕРОПРИЯТИЙ В ЭЛЕКТРОННЫХ РЕСУРСАХ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34240998">Электронное обучение в непрерывном образовании</a>. 
+2016. <a href="/contents.asp?id=34240998&amp;selid=26111596">№&nbsp;1</a>.  С. 400-407.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=26111596" title="Список публикаций, цитирующих данную">4</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw28308792">
+<td align="center" valign="top" class="select-tr-left"><a name="x28308792"></a>
+<font color="#00008f"><b>81.</b></font><br><input type="checkbox" name="tid28308792" id="tid28308792" onclick="if (this.checked) {RowSelect(&quot;arw28308792&quot;,1)} else {RowSelect(&quot;arw28308792&quot;,0)}"><div id="pdf_28308792" name="pdf_28308792"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=28308792"><b><span style="line-height:1.0;">АНАЛИЗ КАЧЕСТВА УПРАВЛЕНИЯ ПРОЕКТОМ JIRA.MONGODB.COM</span></b></a><br><font color="#00008f"><i>Шамаев В.Ю., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладные информационные системы.&nbsp;Сборник научных трудов. 2016.  С. 310-318.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw28308797">
+<td align="center" valign="top" class="select-tr-left"><a name="x28308797"></a>
+<font color="#00008f"><b>82.</b></font><br><input type="checkbox" name="tid28308797" id="tid28308797" onclick="if (this.checked) {RowSelect(&quot;arw28308797&quot;,1)} else {RowSelect(&quot;arw28308797&quot;,0)}"><div id="pdf_28308797" name="pdf_28308797"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=28308797"><b><span style="line-height:1.0;">СЕНТИМЕНТ-АНАЛИЗ В УПРАВЛЕНИИ ПРОЕКТАМИ</span></b></a><br><font color="#00008f"><i>Рафикова Л.С., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладные информационные системы.&nbsp;Сборник научных трудов. 2016.  С. 362-368.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw28308799">
+<td align="center" valign="top" class="select-tr-left"><a name="x28308799"></a>
+<font color="#00008f"><b>83.</b></font><br><input type="checkbox" name="tid28308799" id="tid28308799" onclick="if (this.checked) {RowSelect(&quot;arw28308799&quot;,1)} else {RowSelect(&quot;arw28308799&quot;,0)}"><div id="pdf_28308799" name="pdf_28308799"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=28308799"><b><span style="line-height:1.0;">РАЗРАБОТКА МОДИФИЦИРОВАННОГО ГЕНЕТИЧЕСКОГО АЛГОРИТМА В РАМКАХ РЕАЛИЗАЦИИ СИСТЕМЫ ПЛАНИРОВАНИЯ РАБОТЫ ЭКИПАЖА НАУЧНО-ИССЛЕДОВАТЕЛЬСКОЙ ПОДВОДНОЙ ЛОДКИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Аввакумова В.С., Шеянова И.Н.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладные информационные системы.&nbsp;Сборник научных трудов. 2016.  С. 379-384.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw28308802">
+<td align="center" valign="top" class="select-tr-left"><a name="x28308802"></a>
+<font color="#00008f"><b>84.</b></font><br><input type="checkbox" name="tid28308802" id="tid28308802" onclick="if (this.checked) {RowSelect(&quot;arw28308802&quot;,1)} else {RowSelect(&quot;arw28308802&quot;,0)}"><div id="pdf_28308802" name="pdf_28308802"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=28308802"><b><span style="line-height:1.0;">АНАЛИЗ КАЧЕСТВА УПРАВЛЕНИЯ ПРОЕКТОМ "VAGRANT"</span></b></a><br><font color="#00008f"><i>Елушев С.Н., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладные информационные системы.&nbsp;Сборник научных трудов. 2016.  С. 395-401.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw28308819">
+<td align="center" valign="top" class="select-tr-left"><a name="x28308819"></a>
+<font color="#00008f"><b>85.</b></font><br><input type="checkbox" name="tid28308819" id="tid28308819" onclick="if (this.checked) {RowSelect(&quot;arw28308819&quot;,1)} else {RowSelect(&quot;arw28308819&quot;,0)}"><div id="pdf_28308819" name="pdf_28308819"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=28308819"><b><span style="line-height:1.0;">АНАЛИЗ И ОЦЕНКА РИСКОВ ПРИ РЕАЛИЗАЦИИ КОМПЬЮТЕРНОЙ ИГРЫ</span></b></a><br><font color="#00008f"><i>Прохоров Е.Э., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладные информационные системы.&nbsp;Сборник научных трудов. 2016.  С. 480-485.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw24940700">
+<td align="center" valign="top" class="select-tr-left"><a name="x24940700"></a>
+<font color="#00008f"><b>86.</b></font><br><input type="checkbox" name="tid24940700" id="tid24940700" onclick="if (this.checked) {RowSelect(&quot;arw24940700&quot;,1)} else {RowSelect(&quot;arw24940700&quot;,0)}"><div id="pdf_24940700" name="pdf_24940700"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=24940700"><b><span style="line-height:1.0;">ПРИМЕНЕНИЕ НАУКОМЕТРИЧЕСКИХ ПОКАЗАТЕЛЕЙ ДЛЯ СОЗДАНИЯ В РОССИИ ИННОВАЦИОННОЙ СРЕДЫ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: СОВРЕМЕННЫЕ НАПРАВЛЕНИЯ РАЗВИТИЯ МАРКЕТИНГА И МЕНЕДЖМЕНТА.&nbsp;Сборник научных трудов. Под общей редакцией Е.А. Качагина. 2015.  С. 180-184.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=24940700" title="Список публикаций, цитирующих данную">2</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw24363201">
+<td align="center" valign="top" class="select-tr-left"><a name="x24363201"></a>
+<font color="#00008f"><b>87.</b></font><br><input type="checkbox" name="tid24363201" id="tid24363201" onclick="if (this.checked) {RowSelect(&quot;arw24363201&quot;,1)} else {RowSelect(&quot;arw24363201&quot;,0)}"><div id="pdf_24363201" name="pdf_24363201"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=24363201"><b><span style="line-height:1.0;">ВОЗМОЖНОСТИ ПРИМЕНЕНИЯ РИНЦ И НАУЧНЫХ СОЦИАЛЬНЫХ СЕТЕЙ ДЛЯ РАЗВИТИЯ НАЦИОНАЛЬНОЙ НАУКИ И КУЛЬТУРЫ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: ПАТРИОТИЗМ: ИСТОРИЯ, СОВРЕМЕННОСТЬ, ОБРАЗ БУДУЩЕГО.&nbsp;Международная научно-практическая конференция, посвященная 70-летию Победы в Великой Отечественной войне: Сборник научных трудов: в 2 частях. Под редакцией Т.В. Петуховой. 2015.  С. 307-312.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=24363201" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw23907109">
+<td align="center" valign="top" class="select-tr-left"><a name="x23907109"></a>
+<font color="#00008f"><b>88.</b></font><br><input type="checkbox" name="tid23907109" id="tid23907109" onclick="if (this.checked) {RowSelect(&quot;arw23907109&quot;,1)} else {RowSelect(&quot;arw23907109&quot;,0)}"><div id="pdf_23907109" name="pdf_23907109"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=23907109"><b><span style="line-height:1.0;">СОТРУДНИЧЕСТВО И НАУЧНО-ИССЛЕДОВАТЕЛЬСКИЕ СЕТИ В ЭКОНОМИКЕ ЗНАНИЙ</span></b></a><br><font color="#00008f"><i>Сафиуллин А., Тронин В.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34088044">Проблемы теории и практики управления</a>. 
+2015. <a href="/contents.asp?id=34088044&amp;selid=23907109">№&nbsp;2</a>.  С. 104-111.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=23907109" title="Список публикаций, цитирующих данную">21</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw23715201">
+<td align="center" valign="top" class="select-tr-left"><a name="x23715201"></a>
+<font color="#00008f"><b>89.</b></font><br><input type="checkbox" name="tid23715201" id="tid23715201" onclick="if (this.checked) {RowSelect(&quot;arw23715201&quot;,1)} else {RowSelect(&quot;arw23715201&quot;,0)}"><div id="pdf_23715201" name="pdf_23715201"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=23715201"><b><span style="line-height:1.0;">МАТЕМАТИЧЕСКИЕ МЕТОДЫ АНАЛИЗА РИСКОВ В ИННОВАЦИОННЫХ ПРОЕКТАХ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Галныкина К.С., Стенина А.С.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34080617">Вестник Ульяновского государственного технического университета</a>. 
+2015. <a href="/contents.asp?id=34080617&amp;selid=23715201">№&nbsp;1&nbsp;(69)</a>.  С. 48-56.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=23715201" title="Список публикаций, цитирующих данную">10</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw24309482">
+<td align="center" valign="top" class="select-tr-left"><a name="x24309482"></a>
+<font color="#00008f"><b>90.</b></font><br><input type="checkbox" name="tid24309482" id="tid24309482" onclick="if (this.checked) {RowSelect(&quot;arw24309482&quot;,1)} else {RowSelect(&quot;arw24309482&quot;,0)}"><div id="pdf_24309482" name="pdf_24309482"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=24309482"><b><span style="line-height:1.0;">ПРОФЕССИОНАЛЬНЫЕ СОЦИАЛЬНЫЕ СЕТИ LINKEDIN И АКАДЕМИЯ GOOGLE</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34114529">Вестник Ульяновского государственного технического университета</a>. 
+2015. <a href="/contents.asp?id=34114529&amp;selid=24309482">№&nbsp;3&nbsp;(71)</a>.  С. 34-36.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=24309482" title="Список публикаций, цитирующих данную">11</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw24309473">
+<td align="center" valign="top" class="select-tr-left"><a name="x24309473"></a>
+<font color="#00008f"><b>91.</b></font><br><input type="checkbox" name="tid24309473" id="tid24309473" onclick="if (this.checked) {RowSelect(&quot;arw24309473&quot;,1)} else {RowSelect(&quot;arw24309473&quot;,0)}"><div id="pdf_24309473" name="pdf_24309473"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=24309473"><b><span style="line-height:1.0;">ЖИЗНЕННАЯ СТРАТЕГИЯ ТВОРЧЕСКОЙ ЛИЧНОСТИ В ИТ-ОБРАЗОВАНИИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34114529">Вестник Ульяновского государственного технического университета</a>. 
+2015. <a href="/contents.asp?id=34114529&amp;selid=24309473">№&nbsp;3&nbsp;(71)</a>.  С. 4-6.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=24309473" title="Список публикаций, цитирующих данную">10</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw25378304">
+<td align="center" valign="top" class="select-tr-left"><a name="x25378304"></a>
+<font color="#00008f"><b>92.</b></font><br><input type="checkbox" name="tid25378304" id="tid25378304" onclick="if (this.checked) {RowSelect(&quot;arw25378304&quot;,1)} else {RowSelect(&quot;arw25378304&quot;,0)}"><div id="pdf_25378304" name="pdf_25378304"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=25378304"><b><span style="line-height:1.0;">ПРОЕКТИРОВАНИЕ СИСТЕМЫ ПОДДЕРЖКИ ЖИЗНЕННОЙ СТРАТЕГИИ ТВОРЧЕСКОЙ ЛИЧНОСТИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34214735">Вестник Ульяновского государственного технического университета</a>. 
+2015. <a href="/contents.asp?id=34214735&amp;selid=25378304">№&nbsp;4&nbsp;(72)</a>.  С. 56-58.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=25378304" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw23152186">
+<td align="center" valign="top" class="select-tr-left"><a name="x23152186"></a>
+<font color="#00008f"><b>93.</b></font><br><input type="checkbox" name="tid23152186" id="tid23152186" onclick="if (this.checked) {RowSelect(&quot;arw23152186&quot;,1)} else {RowSelect(&quot;arw23152186&quot;,0)}"><div id="pdf_23152186" name="pdf_23152186"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=23152186"><b><span style="line-height:1.0;">НАУЧНЫЕ СОЦИАЛЬНЫЕ СЕТИ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=34059768">Электронное обучение в непрерывном образовании</a>. 
+2015. <a href="/contents.asp?id=34059768&amp;selid=23152186">№&nbsp;1-1</a>.  С. 158-162.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=23152186" title="Список публикаций, цитирующих данную">4</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw24779234">
+<td align="center" valign="top" class="select-tr-left"><a name="x24779234"></a>
+<font color="#00008f"><b>94.</b></font><br><input type="checkbox" name="tid24779234" id="tid24779234" onclick="if (this.checked) {RowSelect(&quot;arw24779234&quot;,1)} else {RowSelect(&quot;arw24779234&quot;,0)}"><div id="pdf_24779234" name="pdf_24779234"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=24779234"><b><span style="line-height:1.0;">АРМ МЕНЕДЖЕРА ФИРМЫ, ПРЕДОСТАВЛЯЮЩЕЙ УСЛУГИ РАЗРАБОТКИ И ПРОДВИЖЕНИЯ САЙТОВ</span></b></a><br><font color="#00008f"><i>Сурков В.П., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладные информационные системы.&nbsp;вторая Всероссийская НПК: сборник научных трудов. 2015.  С. 296-298.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+0</td></tr>
+
+
+
+<tr valign="middle" id="arw24779115">
+<td align="center" valign="top" class="select-tr-left"><a name="x24779115"></a>
+<font color="#00008f"><b>95.</b></font><br><input type="checkbox" name="tid24779115" id="tid24779115" onclick="if (this.checked) {RowSelect(&quot;arw24779115&quot;,1)} else {RowSelect(&quot;arw24779115&quot;,0)}"><div id="pdf_24779115" name="pdf_24779115"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=24779115"><b><span style="line-height:1.0;">ТЕОРИЯ РЕШЕНИЯ ИЗОБРЕТАТЕЛЬСКИХ ЗАДАЧ И ПРОГРАММИРОВАНИЕ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладные информационные системы.&nbsp;вторая Всероссийская НПК: сборник научных трудов. 2015.  С. 32-36.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=24779115" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw24779268">
+<td align="center" valign="top" class="select-tr-left"><a name="x24779268"></a>
+<font color="#00008f"><b>96.</b></font><br><input type="checkbox" name="tid24779268" id="tid24779268" onclick="if (this.checked) {RowSelect(&quot;arw24779268&quot;,1)} else {RowSelect(&quot;arw24779268&quot;,0)}"><div id="pdf_24779268" name="pdf_24779268"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=24779268"><b><span style="line-height:1.0;">СИСТЕМА УЧЕТА ВРЕМЕНИ ЛЮБИЩЕВА</span></b></a><br><font color="#00008f"><i>Кантимирова А.И., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Прикладные информационные системы.&nbsp;вторая Всероссийская НПК: сборник научных трудов. 2015.  С. 396-400.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=24779268" title="Список публикаций, цитирующих данную">5</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw25878404">
+<td align="center" valign="top" class="select-tr-left"><a name="x25878404"></a>
+<font color="#00008f"><b>97.</b></font><br><input type="checkbox" name="tid25878404" id="tid25878404" onclick="if (this.checked) {RowSelect(&quot;arw25878404&quot;,1)} else {RowSelect(&quot;arw25878404&quot;,0)}"><div id="pdf_25878404" name="pdf_25878404"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=25878404"><b><span style="line-height:1.0;">ФАКТОРЫ, ВЛИЯЮЩИЕ НА РЕЙТИНГ УЛГТУ В РИНЦ</span></b></a><br><font color="#00008f"><i>Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+ В сборнике: Вузовская наука в современных условиях.&nbsp;Сборник материалов 48-й научно-технической конференции в 3-ех частях. 2014.  С. 185-188.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=25878404" title="Список публикаций, цитирующих данную">1</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw21519003">
+<td align="center" valign="top" class="select-tr-left"><a name="x21519003"></a>
+<font color="#00008f"><b>98.</b></font><br><input type="checkbox" name="tid21519003" id="tid21519003" onclick="if (this.checked) {RowSelect(&quot;arw21519003&quot;,1)} else {RowSelect(&quot;arw21519003&quot;,0)}"><div id="pdf_21519003" name="pdf_21519003"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=21519003"><b><span style="line-height:1.0;">РЕЙТИНГИ ОЦЕНКИ ДЕЯТЕЛЬНОСТИ ИНЖЕНЕРНОГО ВУЗА</span></b></a><br><font color="#00008f"><i>Ярушкина Н.Г., Тронин В.Г.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=33960198">Высшее образование в России</a>. 
+2014. <a href="/contents.asp?id=33960198&amp;selid=21519003">№&nbsp;5</a>.  С. 72-79.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=21519003" title="Список публикаций, цитирующих данную">18</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw21422260">
+<td align="center" valign="top" class="select-tr-left"><a name="x21422260"></a>
+<font color="#00008f"><b>99.</b></font><br><input type="checkbox" name="tid21422260" id="tid21422260" onclick="if (this.checked) {RowSelect(&quot;arw21422260&quot;,1)} else {RowSelect(&quot;arw21422260&quot;,0)}"><div id="pdf_21422260" name="pdf_21422260"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=21422260"><b><span style="line-height:1.0;">ПАТЕНТОВАНИЕ И ИННОВАЦИОННАЯ ДЕЯТЕЛЬНОСТЬ В УЛГТУ, МЕСТО РОССИИ В МИРОВОМ РЕЙТИНГЕ ПАТЕНТОВАНИЯ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Костина С.Н., Дёмкина Н.А.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=33954499">Вестник Ульяновского государственного технического университета</a>. 
+2014. <a href="/contents.asp?id=33954499&amp;selid=21422260">№&nbsp;1&nbsp;(65)</a>.  С. 12-19.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=21422260" title="Список публикаций, цитирующих данную">8</a>
+</td></tr>
+
+
+
+<tr valign="middle" id="arw21422259">
+<td align="center" valign="top" class="select-tr-left"><a name="x21422259"></a>
+<font color="#00008f"><b>100.</b></font><br><input type="checkbox" name="tid21422259" id="tid21422259" onclick="if (this.checked) {RowSelect(&quot;arw21422259&quot;,1)} else {RowSelect(&quot;arw21422259&quot;,0)}"><div id="pdf_21422259" name="pdf_21422259"></div>
+
+</td>
+<td align="left" valign="top">
+<span style="overflow-wrap: break-word;">
+
+<a href="/item.asp?id=21422259"><b><span style="line-height:1.0;">НЕОФИЦИАЛЬНЫЕ ИНТЕРНЕТ-РЕЙТИНГИ УНИВЕРСИТЕТОВ</span></b></a><br><font color="#00008f"><i>Тронин В.Г., Костяева Т.С.</i></font><br>
+<font color="#00008f">
+
+<a href="/contents.asp?id=33954499">Вестник Ульяновского государственного технического университета</a>. 
+2014. <a href="/contents.asp?id=33954499&amp;selid=21422259">№&nbsp;1&nbsp;(65)</a>.  С. 7-11.
+</font></span><font color="#00008f">
+</font></td><td align="center" valign="middle" class="select-tr-right">
+<a href="cit_items.asp?gritemid=21422259" title="Список публикаций, цитирующих данную">9</a>
+</td></tr>
+
+
+
+</tbody></table>
+
+
+<script language="JavaScript">
+document.getElementById('totalcited').innerHTML=362;
+</script>
+
+
+<div style="width:578px; height:24px; border:#7f9db9 1px solid;padding:0;margin:20px 0 0 0; text-align:left; border-radius: 12px;" id="pages">
+<table width="578" height="24" cellspacing="1" cellpadding="3" border="0">
+<tbody><tr align="center" valign="middle" class="menurb">
+<td width="15%" nowrap=""><a href="javascript:goto_page(1)">В&nbsp;начало</a></td>
+<td width="10%" class="mouse-hovergr" nowrap=""><font color="#aaaaaa">&lt;&lt;</font></td>
+
+<td width="5%" class="mouse-hovergr" bgcolor="#e8e8e8" nowrap=""><font color="#F26C4F">1</font></td>
+
+<td width="5%" class="mouse-hovergr" bgcolor="#f5f5f5" nowrap=""><a href="javascript:goto_page(2)">2</a></td>
+
+<td width="40%" nowrap=""></td>
+
+<td width="10%" class="mouse-hovergr" nowrap=""><a title="Следующая страница" href="javascript:goto_page(2)">&gt;&gt;</a></td>
+<td width="15%" nowrap=""><a href="javascript:goto_page(2)">В&nbsp;конец</a></td>
+</tr>
+</tbody></table>
+</div>
+
+<br>
+</td></tr></tbody></table>
+
+</td>
+<td align="right" valign="top">
+
+<div id="panel_default" style="position: relative; width: 200px; height:0; margin: 0; border: 1px; padding: 0"></div>
+<div id="panel" style="position: relative; width: 200px; margin: 0px; border: 0px; padding: 0px; top: 0px;">
+
+<div style="width: 190px;" class="right-panel">
+
+<table width="190" cellspacing="0" cellpadding="3" border="0">
+
+<tbody><tr><td colspan="2" align="center" valign="top"><font color="#F26C4F"><b>ИНСТРУМЕНТЫ</b></font><br><img src="/pic/1pix.gif" vspace="1"><br></td></tr>
+
+
+<tr><td width="15%" align="right" valign="top">
+<a href="javascript:goto_page(2)"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="javascript:goto_page(2)">Следующая страница</a>
+</td></tr>
+<tr><td colspan="2"><div style="height:5px;"></div></td></tr>
+
+
+<tr><td width="15%" align="right" valign="top">
+<a href="javascript:select_all()"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="javascript:select_all()">Выделить все публикации на этой странице</a>
+</td></tr>
+<tr><td width="15%" align="right" valign="top">
+<a href="javascript:deselect_all()"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="javascript:deselect_all()">Снять выделение</a>
+</td></tr>
+
+<tr><td colspan="2"><div style="height:5px;"></div></td></tr>
+<tr><td width="15%" align="right" valign="top">
+<a href="javascript:itembox_add()"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="javascript:itembox_add()">Добавить выделенные публикации в подборку</a></td></tr>
+
+<tr><td width="15%" align="right" valign="top">
+<a href="javascript:itembox_add_all()"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="javascript:itembox_add_all()">Добавить все публикации автора в подборку</a></td></tr>
+
+<tr><td colspan="2"><div style="height:5px;"></div></td></tr>
+<tr><td width="15%" align="right" valign="top">
+<a href="cit_author_items.asp?id=524702"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="cit_author_items.asp?id=524702">Список публикаций, ссылающихся на работы автора</a>
+</td></tr>
+
+<tr><td width="15%" align="right" valign="top">
+<a href="author_refs.asp?authorid=524702"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="author_refs.asp?authorid=524702">Список ссылок на работы автора</a>
+</td></tr>
+
+
+
+<tr><td width="15%" align="right" valign="top">
+<a href="author_profile.asp?id=524702"><img src="/pic/stat.gif" width="12" height="13" hspace="4" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="author_profile.asp?authorid=524702">Анализ публикационной активности автора</a>
+</td></tr>
+
+
+<tr><td colspan="2"><div style="height:5px;"></div></td></tr>
+<tr><td width="15%" align="right" valign="top">
+<a href="/projects/science_index/author_tutorial.asp"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="/projects/science_index/author_tutorial.asp">Инструкция для авторов по работе в системе SCIENCE INDEX</a>
+</td></tr>
+
+
+<tr><td colspan="2"><div style="height:5px;"></div></td></tr>
+<tr><td width="15%" align="right" valign="top">
+<a href="authors.asp"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="authors.asp">Авторский указатель</a>
+</td></tr>
+
+<tr><td width="15%" align="right" valign="top">
+<a href="querybox.asp"><img src="images/but_orange.gif" width="15" height="15" hspace="3" border="0"></a></td>
+<td width="85%" align="left" valign="middle"><a href="querybox.asp">Поиск публикаций</a>
+</td></tr>
+
+
+
+
+</tbody></table>
+</div>
+
+</div>
+
+</td></tr></tbody></table>
+</form></td></tr></tbody></table>
+
+
+<script language="JavaScript">
+
+$(function() {
+$(".help").tooltip({
+	position: "top right",
+	offset: [-15, -100],
+	effect: "fade", 
+	fadeInSpeed: 400, 
+	fadeOutSpeed: 400, 
+	delay: 400,  
+	predelay: 400,
+	opacity: 1.0
+});
+});
+</script>
+
+
+<br><br>
+<table width="970" height="40" border="0" cellpadding="0" cellspacing="0" id="footer" style="width: 970px;">
+<tbody><tr align="center" valign="middle" class="menug">
+<td width="15%" valign="bottom">
+
+</td>
+<td width="70%"><font color="#00008f"><span style="position: relative; top: 3px; right: 15px; color: #F26C4F;">*</span><a href="/copyright.asp">© 2000-2026 ООО НАУЧНАЯ ЭЛЕКТРОННАЯ БИБЛИОТЕКА. Все права защищены</a></font><span style="position: relative; top: 3px; left: 15px; color: #F26C4F;">*</span></td>
+<td width="15%" valign="bottom">
+
+</td>
+</tr></tbody></table><div id="arrow">Вверх</div>
+
+<!-- Yandex.Metrika -->
+<div style="display:none;"><script type="text/javascript">
+(function(w, c) {
+    (w[c] = w[c] || []).push(function() {
+        try {
+            w.yaCounter171463 = new Ya.Metrika(171463);
+        } catch(e) {}
+    });
+})(window, 'yandex_metrika_callbacks');
+</script></div>
+<script src="//mc.yandex.ru/metrika/watch.js" type="text/javascript" defer="defer"></script>
+<noscript><div style="position:absolute"><img src="//mc.yandex.ru/watch/171463" alt="" /></div></noscript>
+<!-- /Yandex.Metrika -->
+
+
+
+
+<br><br><br>
+</td></tr></tbody></table>
+
+
+
+</div><div id="fancybox-tmp"></div><div id="fancybox-loading"><div></div></div><div id="fancybox-overlay"></div><div id="fancybox-wrap" style="cursor: move;"><div id="fancybox-outer"><div class="fancybox-bg" id="fancybox-bg-n"></div><div class="fancybox-bg" id="fancybox-bg-ne"></div><div class="fancybox-bg" id="fancybox-bg-e"></div><div class="fancybox-bg" id="fancybox-bg-se"></div><div class="fancybox-bg" id="fancybox-bg-s"></div><div class="fancybox-bg" id="fancybox-bg-sw"></div><div class="fancybox-bg" id="fancybox-bg-w"></div><div class="fancybox-bg" id="fancybox-bg-nw"></div><div id="fancybox-content"></div><a id="fancybox-close"></a><div id="fancybox-title"></div><a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a><a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a></div></div></body><iframe src="https://mc.yandex.ru/metrika/match.html" style="display: none; width: 1px; height: 1px; visibility: hidden;"></iframe></html>
